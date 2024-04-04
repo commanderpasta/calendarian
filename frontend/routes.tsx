@@ -1,4 +1,4 @@
-import ContactsView from 'Frontend/views/contacts/ContactsView.js';
+import CalendarView from 'Frontend/views/calendar/CalendarView.js';
 import MainLayout from 'Frontend/views/MainLayout.js';
 import { lazy } from 'react';
 import { createBrowserRouter, RouteObject } from 'react-router-dom';
@@ -10,7 +10,7 @@ const routing = [
     element: <MainLayout />,
     handle: { title: 'Hilla CRM' },
     children: [
-      { path: '/', element: <ContactsView />, handle: { title: 'Contacts' } },
+      { path: '/', element: <CalendarView />, handle: { title: 'Calendar' } },
       { path: '/about', element: <AboutView />, handle: { title: 'About' } },
     ],
   },

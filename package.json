@@ -38,10 +38,13 @@
     "@vitejs/plugin-react": "4.2.1",
     "@vitejs/plugin-react-swc": "3.5.0",
     "async": "3.2.4",
+    "autoprefixer": "^10.4.19",
     "glob": "10.3.3",
+    "postcss": "^8.4.38",
     "rollup-plugin-brotli": "3.1.0",
     "rollup-plugin-visualizer": "5.12.0",
     "strip-css-comments": "5.0.0",
+    "tailwindcss": "^3.4.3",
     "transform-ast": "2.4.4",
     "typescript": "5.3.3",
     "vite": "5.1.1",
@@ -119,6 +122,6 @@
       "workbox-core": "7.0.0",
       "workbox-precaching": "7.0.0"
     },
-    "hash": "f5434ac024f73dbe8b84e89785c56733a3040983f15b93a1cfe01e73329677d0"
+    "hash": "deda49c2f097d4f8a5d38b322e034cede0991b79a55daf1a5dd1f83fd3c57e4a"
   }
 }
