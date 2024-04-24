@@ -3,6 +3,6 @@ package com.example.application.data;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface CalendarUserRepository extends JpaRepository<CalendarUser, Long> {
 
 }

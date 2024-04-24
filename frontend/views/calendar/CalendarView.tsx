@@ -1,21 +1,15 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import NewEntry from "./NewEntry";
 import CalendarEntryRecord from "Frontend/generated/com/example/application/services/CalendarService/CalendarEntryRecord";
 import { CalendarService } from "Frontend/generated/endpoints";
 import dayjs from "dayjs";
 
 
-function initCalendar(): Map<Date, CalendarEntryRecord> {
+function initCalendar(entries: CalendarEntryRecord[]): Map<Date, CalendarEntryRecord> {
   const calendarMap = new Map<Date, CalendarEntryRecord>();
+  entries.map(entry => calendarMap.set(dayjs(entry.date).toDate(), entry));
 
-  let currentDate = dayjs().startOf("month");
-
-  while (currentDate.isBefore(currentDate.endOf("month")) || currentDate.isSame(currentDate.endOf("month"))) {
-    currentDate = currentDate.add(1, "day");
-  }
-
-  const [contacts, setContacts] = useState<ContactRecord[]>([]);
-  const [selected, setSelected] = useState<ContactRecord | null | undefined>();
+  return calendarMap;
 }
 
 export default function CalendarView() {
@@ -24,9 +18,8 @@ export default function CalendarView() {
 
   const [isAddingEntry, setAddingEntry] = useState<boolean>(false);
 
-
   useEffect(() => {
-    CRMService.findAllContacts().then(setContacts);
+    CalendarService.findCalendarOfUser(1).then(initCalendar);
   }, []);
 
   async function onCalendarEntrySaved(calendarEntry: CalendarEntryRecord) {

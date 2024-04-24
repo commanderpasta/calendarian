@@ -30,17 +30,20 @@ public class CalendarEntry extends AbstractEntity {
     private int hoursOfSleep;
 
     @ManyToOne()
-    private User user;
+    private CalendarUser user;
 
     @Nullable
     private String note;
 
-    public CalendarEntry(LocalDateTime date, Mood mood, int hoursOfSleep, String note, User user) {
+    public CalendarEntry(LocalDateTime date, Mood mood, int hoursOfSleep, String note, CalendarUser user) {
         this.date = date;
         this.mood = mood;
         this.hoursOfSleep = hoursOfSleep;
         this.note = note;
         this.user = user;
+    }
+
+    public CalendarEntry() {
     }
 
     public Mood getMood() {
@@ -75,11 +78,11 @@ public class CalendarEntry extends AbstractEntity {
         this.date = date;
     }
 
-    public User getUser() {
+    public CalendarUser getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(CalendarUser user) {
         this.user = user;
     }
 }

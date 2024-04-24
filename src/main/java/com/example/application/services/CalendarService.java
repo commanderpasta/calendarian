@@ -2,10 +2,12 @@ package com.example.application.services;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import com.example.application.data.CalendarRepository;
+import com.example.application.data.CalendarUser;
+import com.example.application.data.CalendarUserRepository;
 import com.example.application.data.CalendarEntry;
-import com.example.application.data.UserRepository;
 import com.github.javaparser.quality.NotNull;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import dev.hilla.BrowserCallable;
@@ -16,9 +18,9 @@ import jakarta.validation.constraints.PositiveOrZero;
 @BrowserCallable
 public class CalendarService {
     private final CalendarRepository calendarRepository;
-    private final UserRepository userRepository;
+    private final CalendarUserRepository userRepository;
 
-    public CalendarService(CalendarRepository calendarRepository, UserRepository userRepository) {
+    public CalendarService(CalendarRepository calendarRepository, CalendarUserRepository userRepository) {
         this.calendarRepository = calendarRepository;
         this.userRepository = userRepository;
     }
@@ -56,8 +58,10 @@ public class CalendarService {
     }
 
     public List<CalendarEntryRecord> findCalendarOfUser(long userId) {
-        List<CalendarEntry> userCalendar = calendarRepository.findAllOfUser(userId);
-        return userCalendar.stream() 
+        CalendarUser user = userRepository.findById(userId).orElseThrow();
+
+        List<CalendarEntry> userCalendar = calendarRepository.findAllOfUser(user);
+        return userCalendar.stream()
                 .map(this::toCalendarEntryRecord).toList();
     }
 
