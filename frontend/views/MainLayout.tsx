@@ -22,7 +22,6 @@ export default function MainLayout() {
           
           <nav className="flex flex-col gap-2">
             <MenuButton label="Calendar" toPath="/" />
-            <MenuButton label="Contacts" toPath="/contacts" />
             <MenuButton label="About" toPath="/about" />
           </nav>
         </header>
