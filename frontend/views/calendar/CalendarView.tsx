@@ -31,6 +31,12 @@ export default function CalendarView() {
   return (
     <div className="p-m">
       <h2>Calendar</h2>
+      {Array.from(calendarByDay.entries()).map(([key, value]) => (
+        <div key={key.toString()}>
+          Key: {key.toString()}, Value: {value.note}
+        </div>
+      ))}
+
       <button onClick={e => setAddingEntry(true)} type="button">
         Add entry
       </button>
