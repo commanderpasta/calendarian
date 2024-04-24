@@ -1,13 +1,14 @@
 import {TextField} from "@hilla/react-components/TextField";
-import {EmailField} from "@hilla/react-components/EmailField";
 import {Select, SelectItem} from "@hilla/react-components/Select";
 import {Button} from "@hilla/react-components/Button";
 import {useForm} from "@hilla/react-form";
 import {useEffect, useState} from "react";
 
-import {CalendarService} from "Frontend/generated/endpoints";
 import CalendarEntryRecordModel from "Frontend/generated/com/example/application/services/CalendarService/CalendarEntryRecordModel";
 import CalendarEntryRecord from "Frontend/generated/com/example/application/services/CalendarService/CalendarEntryRecord";
+import Mood from "Frontend/generated/com/example/application/data/CalendarEntry/Mood";
+import { DatePicker } from "@hilla/react-components/DatePicker.js";
+import { NumberField } from "@hilla/react-components/NumberField.js";
 
 interface CalendarEntryFormProps {
     calendarEntry?: CalendarEntryRecord | null;
@@ -16,7 +17,7 @@ interface CalendarEntryFormProps {
 
 export default function CalendarEntryForm({calendarEntry, onSubmit}: CalendarEntryFormProps) {
 
-    const [companies, setCompanies] = useState<SelectItem[]>([]);
+    const [moods, setMoods] = useState<SelectItem[]>([]);
 
     const {field, model, submit, reset, read} = useForm(CalendarEntryRecordModel, { onSubmit } );
 
@@ -25,28 +26,27 @@ export default function CalendarEntryForm({calendarEntry, onSubmit}: CalendarEnt
     }, [calendarEntry]);
 
     useEffect(() => {
-        getCompanies();
+        getMoods();
     }, []);
 
-    async function getCompanies() {
-        const companies = await CRMService.findAllCompanies();
-        const companyItems = companies.map(company => {
+    async function getMoods() {
+        const moodSelectItems = Object.entries(Mood).map(mood => {
             return {
-                label: company.name,
-                value: company.id + ""
+                label: mood.toString(),
+                value: mood.toString()
             };
         });
-        setCompanies(companyItems);
+        
+        setMoods(moodSelectItems);
     }
 
     return (
         <div className="flex flex-col gap-s items-start">
 
-            <TextField label="First name" {...field(model.firstName)} />
-            <TextField label="Last name" {...field(model.lastName)} />
-            <EmailField label="Email" {...field(model.email)} />
-            <Select label="Company" items={companies} {...field(model.company.id)} />
-
+            <DatePicker label="Date" {...field(model.date)} />
+            <Select label="Mood" items={moods} {...field(model.mood)} />
+            <NumberField label="Sleep (in h)" {...field(model.hoursOfSleep)} />
+            <TextField label="Notes" {...field(model.note)} />
             <div className="flex gap-m">
                 <Button onClick={submit} theme="primary">Save</Button>
                 <Button onClick={reset}>Reset</Button>
