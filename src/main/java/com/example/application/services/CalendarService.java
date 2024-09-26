@@ -10,7 +10,7 @@ import com.example.application.data.CalendarUserRepository;
 import com.example.application.data.CalendarEntry;
 import com.github.javaparser.quality.NotNull;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
-import dev.hilla.BrowserCallable;
+import com.vaadin.hilla.BrowserCallable;
 import io.micrometer.common.lang.Nullable;
 import jakarta.validation.constraints.PositiveOrZero;
 

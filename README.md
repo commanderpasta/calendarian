@@ -1,6 +1,11 @@
 # Calendarian
 This is an application written using the [Hilla](https://hilla.dev) framework for mood tracking and journaling.
 
+## Setup
+
+### Initializing the DB for the first time
+Install sqlite3 and run `sqlite3 db.sqlite < sqlite_init.sql`.
+
 ## Planned features
 
 - [ ] Use Hilla with Flux to stream notifications from backend to frontend

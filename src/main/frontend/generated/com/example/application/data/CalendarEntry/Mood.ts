@@ -1,0 +1,8 @@
+enum Mood {
+    VERYPOSITIVE = "VERYPOSITIVE",
+    POSITIVE = "POSITIVE",
+    NEUTRAL = "NEUTRAL",
+    NEGATIVE = "NEGATIVE",
+    VERYNEGATIVE = "VERYNEGATIVE"
+}
+export default Mood;
