@@ -5,13 +5,6 @@ import { CalendarService } from "Frontend/generated/endpoints";
 import dayjs from "dayjs";
 
 
-function initCalendar(entries: CalendarEntryRecord[]): Map<Date, CalendarEntryRecord> {
-  const calendarMap = new Map<Date, CalendarEntryRecord>();
-  entries.map(entry => calendarMap.set(dayjs(entry.date).toDate(), entry));
-
-  return calendarMap;
-}
-
 export default function CalendarView() {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [calendarByDay, setCalendarByDay] = useState<Map<Date, CalendarEntryRecord>>(new Map<Date, CalendarEntryRecord>());
@@ -21,6 +14,13 @@ export default function CalendarView() {
   useEffect(() => {
     CalendarService.findCalendarOfUser(1).then(initCalendar);
   }, []);
+
+  function initCalendar(entries: CalendarEntryRecord[]): void {
+    const calendarMap = new Map<Date, CalendarEntryRecord>();
+    entries.map(entry => calendarMap.set(dayjs(entry.date).toDate(), entry));
+  
+    setCalendarByDay(calendarMap);
+  }
 
   async function onCalendarEntrySaved(calendarEntry: CalendarEntryRecord) {
     const saved = await CalendarService.save(calendarEntry);

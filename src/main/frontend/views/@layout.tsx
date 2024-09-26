@@ -16,7 +16,7 @@ export default function MainLayout() {
     <AppLayout primarySection="drawer">
       <DrawerToggle slot="navbar" aria-label="Menu toggle"></DrawerToggle>
 
-      <div slot="drawer" className="flex flex-col justify-between h-full p-m">
+      <div slot="drawer">
         <header>
           <NavLink to="/"><img src={logo} /></NavLink>
           
