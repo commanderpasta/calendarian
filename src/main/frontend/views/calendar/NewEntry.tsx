@@ -35,7 +35,6 @@ export default function CalendarEntryForm({calendarEntry, onSubmit}: CalendarEnt
 
     return (
         <div className="flex flex-col gap-s items-start">
-
             <DatePicker label="Date" {...field(model.date)} />
             <Select label="Mood" items={moods} {...field(model.mood)} />
             <NumberField label="Sleep (in h)" {...field(model.hoursOfSleep)} />

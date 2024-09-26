@@ -3,6 +3,7 @@ import NewEntry from "./NewEntry";
 import CalendarEntryRecord from "Frontend/generated/com/example/application/services/CalendarService/CalendarEntryRecord";
 import { CalendarService } from "Frontend/generated/endpoints";
 import dayjs from "dayjs";
+import CalendarElement from "../../components/CalendarElement";
 
 
 export default function CalendarView() {
@@ -18,7 +19,7 @@ export default function CalendarView() {
   function initCalendar(entries: CalendarEntryRecord[]): void {
     const calendarMap = new Map<Date, CalendarEntryRecord>();
     entries.map(entry => calendarMap.set(dayjs(entry.date).toDate(), entry));
-  
+
     setCalendarByDay(calendarMap);
   }
 
@@ -31,18 +32,29 @@ export default function CalendarView() {
   return (
     <div className="m-4">
       <h2 className="text-xl font-bold">Calendar</h2>
-      {Array.from(calendarByDay.entries()).map(([key, value]) => (
-        <div key={key.toString()}>
-          Key: {key.toString()}, Value: {value.note}
-        </div>
-      ))}
+      <table className="table-auto text-left w-full">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Mood</th>
+            <th>Sleep (h)</th>
+            <th>Note</th>
+          </tr>
+        </thead>
+        <tbody>
+          {Array.from(calendarByDay.entries()).map(([key, value]) => (
+            <CalendarElement key={key.toString()} calendarEntry={value} />
+          ))}
+
+        </tbody>
+      </table>
 
       <button onClick={e => setAddingEntry(true)} type="button">
         Add entry
       </button>
 
       {isAddingEntry &&
-        <NewEntry onSubmit={onCalendarEntrySaved}/>
+        <NewEntry onSubmit={onCalendarEntrySaved} />
       }
     </div>
   );
