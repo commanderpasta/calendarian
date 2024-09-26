@@ -7,7 +7,7 @@ class CalendarEntryRecordModel<T extends CalendarEntryRecord_1 = CalendarEntryRe
         return this[_getPropertyModel_1]("id", (parent, key) => new NumberModel_1(parent, key, false, { meta: { javaType: "java.lang.Long" } }));
     }
     get date(): StringModel_1 {
-        return this[_getPropertyModel_1]("date", (parent, key) => new StringModel_1(parent, key, false, { meta: { javaType: "java.time.LocalDateTime" } }));
+        return this[_getPropertyModel_1]("date", (parent, key) => new StringModel_1(parent, key, false, { meta: { javaType: "java.time.LocalDate" } }));
     }
     get mood(): MoodModel_1 {
         return this[_getPropertyModel_1]("mood", (parent, key) => new MoodModel_1(parent, key, false));

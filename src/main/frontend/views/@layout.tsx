@@ -17,10 +17,9 @@ export default function MainLayout() {
       <DrawerToggle slot="navbar" aria-label="Menu toggle"></DrawerToggle>
 
       <div slot="drawer">
-        <header>
-          <NavLink to="/"><img src={logo} /></NavLink>
-          
+        <header>          
           <nav className="flex flex-col gap-2">
+            <NavLink to="/" className=" bg-teal-200 hover:bg-teal-300 rounded-xl mt-2 mx-2"><img src={logo} /></NavLink>
             <MenuButton label="Calendar" toPath="/calendar" />
             <MenuButton label="About" toPath="/about" />
           </nav>

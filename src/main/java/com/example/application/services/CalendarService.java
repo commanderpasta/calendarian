@@ -1,8 +1,7 @@
 package com.example.application.services;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 import com.example.application.data.CalendarRepository;
 import com.example.application.data.CalendarUser;
@@ -26,10 +25,11 @@ public class CalendarService {
     }
 
     public record CalendarEntryRecord(
+            @Nullable
             Long id,
 
             @NotNull
-            LocalDateTime date,
+            LocalDate date,
 
             @NotNull
             CalendarEntry.Mood mood,
@@ -66,7 +66,14 @@ public class CalendarService {
     }
 
     public CalendarEntryRecord save(CalendarEntryRecord calendarEntry) {
-        var dbCalendarEntry = calendarRepository.findById(calendarEntry.id).orElseThrow();
+        CalendarEntry dbCalendarEntry;
+
+        if (calendarEntry.id == null) {
+            dbCalendarEntry = new CalendarEntry();
+        } else {
+            dbCalendarEntry = calendarRepository.findById(calendarEntry.id).orElseThrow();
+        }
+
         var dbUser = userRepository.findById(calendarEntry.userId).orElseThrow();
 
         dbCalendarEntry.setDate(calendarEntry.date);

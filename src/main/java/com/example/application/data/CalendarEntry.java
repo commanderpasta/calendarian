@@ -7,7 +7,7 @@ import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 public class CalendarEntry extends AbstractEntity {
@@ -20,7 +20,7 @@ public class CalendarEntry extends AbstractEntity {
     }
     
     @NotNull
-    private LocalDateTime date;
+    private LocalDate date;
 
     @NotNull
     private Mood mood;
@@ -35,7 +35,7 @@ public class CalendarEntry extends AbstractEntity {
     @Nullable
     private String note;
 
-    public CalendarEntry(LocalDateTime date, Mood mood, int hoursOfSleep, String note, CalendarUser user) {
+    public CalendarEntry(LocalDate date, Mood mood, int hoursOfSleep, String note, CalendarUser user) {
         this.date = date;
         this.mood = mood;
         this.hoursOfSleep = hoursOfSleep;
@@ -70,11 +70,11 @@ public class CalendarEntry extends AbstractEntity {
         this.note = note;
     }
 
-    public LocalDateTime getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(LocalDateTime date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 

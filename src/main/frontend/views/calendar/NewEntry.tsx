@@ -1,7 +1,7 @@
 import {TextField} from "@vaadin/react-components/TextField";
 import {Select, SelectItem} from "@vaadin/react-components/Select";
 import {Button} from "@vaadin/react-components/Button";
-import {useForm} from "@vaadin/hilla-react-form";
+import {useForm, useFormPart} from "@vaadin/hilla-react-form";
 import {useEffect, useState} from "react";
 
 import CalendarEntryRecordModel from "Frontend/generated/com/example/application/services/CalendarService/CalendarEntryRecordModel";
@@ -20,25 +20,18 @@ export default function CalendarEntryForm({calendarEntry, onSubmit}: CalendarEnt
     const [moods, setMoods] = useState<SelectItem[]>([]);
 
     const {field, model, submit, reset, read} = useForm(CalendarEntryRecordModel, { onSubmit } );
+    const moodField = useFormPart(model.mood);
 
     useEffect(() => {
-        read(calendarEntry);
-    }, [calendarEntry]);
+        read(calendarEntry ?? { userId: 1 });
 
-    useEffect(() => {
-        getMoods();
-    }, []);
-
-    async function getMoods() {
-        const moodSelectItems = Object.entries(Mood).map(mood => {
+        setMoods(Object.values(Mood).map(mood => {
             return {
-                label: mood.toString(),
-                value: mood.toString()
+                label: (mood.toString() as string).toLowerCase(),
+                value: mood.toString(),
             };
-        });
-        
-        setMoods(moodSelectItems);
-    }
+        }));
+    }, [calendarEntry]);
 
     return (
         <div className="flex flex-col gap-s items-start">
