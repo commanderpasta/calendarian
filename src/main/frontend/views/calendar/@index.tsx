@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import NewEntry from "./NewEntry";
-import CalendarEntryRecord from "Frontend/generated/com/example/application/services/CalendarService/CalendarEntryRecord";
+import CalendarEntryRecord from "Frontend/generated/com/ianmatos/calendarian/services/CalendarService/CalendarEntryRecord";
 import { CalendarService } from "Frontend/generated/endpoints";
 import dayjs from "dayjs";
 import CalendarElement from "../../components/CalendarElement";

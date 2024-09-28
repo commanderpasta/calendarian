@@ -1,6 +1,8 @@
-package com.example.application.data;
+package com.ianmatos.calendarian.data.calendar;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 import jakarta.annotation.Nullable;
@@ -8,6 +10,9 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 
 import java.time.LocalDate;
+
+import com.ianmatos.calendarian.data.AbstractEntity;
+import com.ianmatos.calendarian.data.client.Client;
 
 @Entity
 public class CalendarEntry extends AbstractEntity {
@@ -29,18 +34,19 @@ public class CalendarEntry extends AbstractEntity {
     @PositiveOrZero
     private int hoursOfSleep;
 
-    @ManyToOne()
-    private CalendarUser user;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "client.id")
+    private Client client;
 
     @Nullable
     private String note;
 
-    public CalendarEntry(LocalDate date, Mood mood, int hoursOfSleep, String note, CalendarUser user) {
+    public CalendarEntry(LocalDate date, Mood mood, int hoursOfSleep, String note, Client client) {
         this.date = date;
         this.mood = mood;
         this.hoursOfSleep = hoursOfSleep;
         this.note = note;
-        this.user = user;
+        this.client = client;
     }
 
     public CalendarEntry() {
@@ -78,11 +84,11 @@ public class CalendarEntry extends AbstractEntity {
         this.date = date;
     }
 
-    public CalendarUser getUser() {
-        return user;
+    public Client getClient() {
+        return client;
     }
 
-    public void setUser(CalendarUser user) {
-        this.user = user;
+    public void setClient(Client client) {
+        this.client = client;
     }
 }

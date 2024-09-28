@@ -4,9 +4,9 @@ import {Button} from "@vaadin/react-components/Button";
 import {useForm, useFormPart} from "@vaadin/hilla-react-form";
 import {useEffect, useState} from "react";
 
-import CalendarEntryRecordModel from "Frontend/generated/com/example/application/services/CalendarService/CalendarEntryRecordModel";
-import CalendarEntryRecord from "Frontend/generated/com/example/application/services/CalendarService/CalendarEntryRecord";
-import Mood from "Frontend/generated/com/example/application/data/CalendarEntry/Mood";
+import CalendarEntryRecordModel from "Frontend/generated/com/ianmatos/calendarian/services/CalendarService/CalendarEntryRecordModel";
+import CalendarEntryRecord from "Frontend/generated/com/ianmatos/calendarian/services/CalendarService/CalendarEntryRecord";
+import Mood from "Frontend/generated/com/ianmatos/calendarian/data/calendar/CalendarEntry/Mood";
 import { DatePicker } from "@vaadin/react-components/DatePicker.js";
 import { NumberField } from "@vaadin/react-components/NumberField.js";
 

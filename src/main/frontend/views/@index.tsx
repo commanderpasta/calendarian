@@ -1,4 +1,3 @@
-
 /**
  * Hilla view that is available publicly.
  */

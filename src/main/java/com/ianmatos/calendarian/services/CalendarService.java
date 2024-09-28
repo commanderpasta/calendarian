@@ -1,27 +1,29 @@
-package com.example.application.services;
+package com.ianmatos.calendarian.services;
 
 import java.time.LocalDate;
 import java.util.List;
 
-import com.example.application.data.CalendarRepository;
-import com.example.application.data.CalendarUser;
-import com.example.application.data.CalendarUserRepository;
-import com.example.application.data.CalendarEntry;
 import com.github.javaparser.quality.NotNull;
-import com.vaadin.flow.server.auth.AnonymousAllowed;
-import com.vaadin.hilla.BrowserCallable;
+import com.ianmatos.calendarian.data.calendar.CalendarEntry;
+import com.ianmatos.calendarian.data.calendar.CalendarEntryRepository;
+import com.ianmatos.calendarian.data.client.Client;
+import com.ianmatos.calendarian.data.client.ClientRepository;
+import com.vaadin.flow.server.VaadinRequest;
+import com.vaadin.hilla.Endpoint;
+
 import io.micrometer.common.lang.Nullable;
+import jakarta.annotation.security.PermitAll;
 import jakarta.validation.constraints.PositiveOrZero;
 
-@AnonymousAllowed
-@BrowserCallable
+@Endpoint
+@PermitAll
 public class CalendarService {
-    private final CalendarRepository calendarRepository;
-    private final CalendarUserRepository userRepository;
+    private final CalendarEntryRepository calendarRepository;
+    private final ClientRepository clientRepository;
 
-    public CalendarService(CalendarRepository calendarRepository, CalendarUserRepository userRepository) {
+    public CalendarService(CalendarEntryRepository calendarRepository, ClientRepository clientRepository) {
         this.calendarRepository = calendarRepository;
-        this.userRepository = userRepository;
+        this.clientRepository = clientRepository;
     }
 
     public record CalendarEntryRecord(
@@ -38,9 +40,6 @@ public class CalendarService {
             @PositiveOrZero
             int hoursOfSleep,
 
-            @NotNull
-            long userId,
-
             @Nullable
             String note
     ) {
@@ -52,20 +51,23 @@ public class CalendarService {
                 c.getDate(),
                 c.getMood(),
                 c.getHoursOfSleep(),
-                c.getUser().getId(),
                 c.getNote()
         );
     }
 
-    public List<CalendarEntryRecord> findCalendarOfUser(long userId) {
-        CalendarUser user = userRepository.findById(userId).orElseThrow();
+    public List<CalendarEntryRecord> findMyCalendar() {
+        String username = VaadinRequest.getCurrent().getUserPrincipal().getName();
+        Client client = clientRepository.findByUsername(username);
 
-        List<CalendarEntry> userCalendar = calendarRepository.findAllOfUser(user);
+        List<CalendarEntry> userCalendar = calendarRepository.findByClient(client);
         return userCalendar.stream()
                 .map(this::toCalendarEntryRecord).toList();
     }
 
     public CalendarEntryRecord save(CalendarEntryRecord calendarEntry) {
+        String username = VaadinRequest.getCurrent().getUserPrincipal().getName();
+        Client client = clientRepository.findByUsername(username);
+
         CalendarEntry dbCalendarEntry;
 
         if (calendarEntry.id == null) {
@@ -74,13 +76,11 @@ public class CalendarService {
             dbCalendarEntry = calendarRepository.findById(calendarEntry.id).orElseThrow();
         }
 
-        var dbUser = userRepository.findById(calendarEntry.userId).orElseThrow();
-
         dbCalendarEntry.setDate(calendarEntry.date);
         dbCalendarEntry.setMood(calendarEntry.mood);
         dbCalendarEntry.setHoursOfSleep(calendarEntry.hoursOfSleep);
         dbCalendarEntry.setNote(calendarEntry.note);
-        dbCalendarEntry.setUser(dbUser);
+        dbCalendarEntry.setClient(client);
 
         var saved = calendarRepository.save(dbCalendarEntry);
 

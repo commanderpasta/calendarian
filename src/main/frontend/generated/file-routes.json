@@ -35,6 +35,14 @@
             "title": "Calendar Entry Form"
           }
         ]
+      },
+      {
+        "route": "login",
+        "menu": {
+          "exclude": true
+        },
+        "params": {},
+        "title": "Login"
       }
     ]
   }

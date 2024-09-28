@@ -1,4 +1,4 @@
-package com.example.application.data;
+package com.ianmatos.calendarian.data;
 
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -11,7 +11,8 @@ import jakarta.persistence.Version;
 public abstract class AbstractEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "idgenerator")
+    // TODO: reconsider generation type for users considering enumeration?
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "idgenerator")
     // The initial value is to account for data.sql demo data ids
     @SequenceGenerator(name = "idgenerator", initialValue = 1000)
     private Long id;
