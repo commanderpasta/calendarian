@@ -1,4 +1,4 @@
-import CalendarEntryRecord from "Frontend/generated/com/example/application/services/CalendarService/CalendarEntryRecord";
+import CalendarEntryRecord from "Frontend/generated/com/ianmatos/calendarian/services/CalendarService/CalendarEntryRecord";
 import dayjs from "dayjs";
 
 interface CalendarElementProps {

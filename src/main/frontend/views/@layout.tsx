@@ -13,7 +13,7 @@ export default function MainLayout() {
   }, [currentTitle]);
 
   const { state, logout } = useAuth();
-  console.debug("STATE", state)
+
   return (
     <AppLayout primarySection="drawer">
       <div slot="navbar" className="flex justify-between w-full">
@@ -29,7 +29,7 @@ export default function MainLayout() {
             <>
               <div className="flex items-center gap-x-2">
                 <span>{`Welcome, ${state.user.name}.`}</span>
-                <Button onClick={async () => doLogout()} className="!bg-teal-200 !text-black" theme="primary">Sign out</Button>
+                <Button onClick={async () => logout} className="!bg-teal-200 !text-black" theme="primary">Sign out</Button>
               </div>
             </>
           ) : (

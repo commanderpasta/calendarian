@@ -4,7 +4,11 @@ import CalendarEntryRecord from "Frontend/generated/com/ianmatos/calendarian/ser
 import { CalendarService } from "Frontend/generated/endpoints";
 import dayjs from "dayjs";
 import CalendarElement from "../../components/CalendarElement";
+import { ViewConfig } from "@vaadin/hilla-file-router/types.js";
 
+export const config: ViewConfig = {
+  loginRequired: true,
+}
 
 export default function CalendarView() {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
@@ -13,7 +17,7 @@ export default function CalendarView() {
   const [isAddingEntry, setAddingEntry] = useState<boolean>(false);
 
   useEffect(() => {
-    CalendarService.findCalendarOfUser(1).then(initCalendar);
+    (CalendarService.findMyCalendar() as Promise<CalendarEntryRecord[]>).then(initCalendar);
   }, []);
 
   function initCalendar(entries: CalendarEntryRecord[]): void {
@@ -25,8 +29,11 @@ export default function CalendarView() {
 
   async function onCalendarEntrySaved(calendarEntry: CalendarEntryRecord) {
     const saved = await CalendarService.save(calendarEntry);
-    setCalendarByDay(calendarMap => calendarMap.set(new Date(saved.date), saved));
-    setAddingEntry(false);
+
+    if (saved) {
+      setCalendarByDay(calendarMap => calendarMap.set(new Date(saved.date), saved));
+      setAddingEntry(false);
+    }
   }
 
   return (

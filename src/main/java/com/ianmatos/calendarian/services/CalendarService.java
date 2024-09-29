@@ -3,16 +3,17 @@ package com.ianmatos.calendarian.services;
 import java.time.LocalDate;
 import java.util.List;
 
-import com.github.javaparser.quality.NotNull;
 import com.ianmatos.calendarian.data.calendar.CalendarEntry;
 import com.ianmatos.calendarian.data.calendar.CalendarEntryRepository;
 import com.ianmatos.calendarian.data.client.Client;
 import com.ianmatos.calendarian.data.client.ClientRepository;
 import com.vaadin.flow.server.VaadinRequest;
 import com.vaadin.hilla.Endpoint;
+import com.vaadin.hilla.Nonnull;
+import com.vaadin.hilla.Nullable;
 
-import io.micrometer.common.lang.Nullable;
 import jakarta.annotation.security.PermitAll;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 
 @Endpoint
@@ -30,7 +31,7 @@ public class CalendarService {
             @Nullable
             Long id,
 
-            @NotNull
+            @Nonnull
             LocalDate date,
 
             @NotNull

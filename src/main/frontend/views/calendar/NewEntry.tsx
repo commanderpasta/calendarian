@@ -23,7 +23,7 @@ export default function CalendarEntryForm({calendarEntry, onSubmit}: CalendarEnt
     const moodField = useFormPart(model.mood);
 
     useEffect(() => {
-        read(calendarEntry ?? { userId: 1 });
+        read(calendarEntry);
 
         setMoods(Object.values(Mood).map(mood => {
             return {

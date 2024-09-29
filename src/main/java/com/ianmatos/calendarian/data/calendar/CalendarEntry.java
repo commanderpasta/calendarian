@@ -5,7 +5,6 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
-import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 
@@ -13,6 +12,7 @@ import java.time.LocalDate;
 
 import com.ianmatos.calendarian.data.AbstractEntity;
 import com.ianmatos.calendarian.data.client.Client;
+import com.vaadin.hilla.Nullable;
 
 @Entity
 public class CalendarEntry extends AbstractEntity {
