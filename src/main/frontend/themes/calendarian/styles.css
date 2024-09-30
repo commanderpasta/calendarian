@@ -1,3 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+    --lumo-primary-color: rgb(93, 200, 227);
+}

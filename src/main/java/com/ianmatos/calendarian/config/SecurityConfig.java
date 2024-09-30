@@ -12,6 +12,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder.BCryptVersion;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.provisioning.UserDetailsManager;
 
@@ -45,24 +48,29 @@ public class SecurityConfig extends VaadinWebSecurity {
 
   @Override
   public void configure(WebSecurity web) throws Exception {
-      super.configure(web);
+    super.configure(web);
+  }
+
+  @Bean
+  PasswordEncoder passwordEncoder() {
+      return new BCryptPasswordEncoder(BCryptVersion.$2Y, 12);
   }
 
   @Bean
   public DataSource dataSource() {
       return new EmbeddedDatabaseBuilder()
-          .setType(EmbeddedDatabaseType.H2)
-          .addScript(JdbcDaoImpl.DEFAULT_USER_SCHEMA_DDL_LOCATION)
-          .build();
+        .setType(EmbeddedDatabaseType.H2)
+        .addScript(JdbcDaoImpl.DEFAULT_USER_SCHEMA_DDL_LOCATION)
+        .build();
   }
 
   @Bean
   public UserDetailsManager users(DataSource dataSource) {
     JdbcUserDetailsManager userDetailsManager = new JdbcUserDetailsManager(dataSource);
 
-    UserDetails user = User.withDefaultPasswordEncoder()
+    UserDetails user = User.builder()
         .username("user")
-        .password("password")
+        .password(passwordEncoder().encode("password"))
         .roles("USER")
         .build();
     userDetailsManager.createUser(user);

@@ -5,12 +5,14 @@ import { useRouteMetadata } from 'Frontend/util/routing.js';
 import { Suspense, useEffect } from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
 import { useAuth } from '../auth';
+import { createMenuItems } from '@vaadin/hilla-file-router/runtime.js';
 
 export default function MainLayout() {
   const currentTitle = useRouteMetadata()?.title ?? 'My App';
   useEffect(() => {
     document.title = `Calendarian - ${currentTitle}`;
   }, [currentTitle]);
+  
 
   const { state, logout } = useAuth();
 
@@ -29,11 +31,11 @@ export default function MainLayout() {
             <>
               <div className="flex items-center gap-x-2">
                 <span>{`Welcome, ${state.user.name}.`}</span>
-                <Button onClick={async () => logout} className="!bg-teal-200 !text-black" theme="primary">Sign out</Button>
+                <Button onClick={logout} className="!bg-teal-200 !text-black" theme="primary">Sign out</Button>
               </div>
             </>
           ) : (
-            <a href="/login">
+            <a href="/auth">
               <Button className="w-full text-teal-200">Sign in</Button>
             </a>
           )}
@@ -45,12 +47,9 @@ export default function MainLayout() {
           <nav className="flex flex-col gap-2">
             <NavLink to="/" className="bg-teal-200 hover:bg-teal-300 rounded-xl mt-2 mx-2"><img src={logo} /></NavLink>
   
-            {state.user ? (
-              <>
-                <MenuButton label="Calendar" toPath="/calendar" />
-                <MenuButton label="About" toPath="/about" />
-              </>
-            ) : (<></>)}
+            {createMenuItems().map(({ to, icon, title }) => 
+              <MenuButton toPath={to} label={title ?? ""} key={to} />
+            )}
           </nav>
         </header>
       </div>

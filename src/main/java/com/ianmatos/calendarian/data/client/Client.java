@@ -1,14 +1,9 @@
 package com.ianmatos.calendarian.data.client;
 
-import org.springframework.security.core.userdetails.User;
-
 import com.ianmatos.calendarian.data.AbstractEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 

@@ -9,6 +9,14 @@ import CalendarEntryRecord from "Frontend/generated/com/ianmatos/calendarian/ser
 import Mood from "Frontend/generated/com/ianmatos/calendarian/data/calendar/CalendarEntry/Mood";
 import { DatePicker } from "@vaadin/react-components/DatePicker.js";
 import { NumberField } from "@vaadin/react-components/NumberField.js";
+import { ViewConfig } from "@vaadin/hilla-file-router/types.js";
+
+export const config: ViewConfig = {
+    loginRequired: true,
+    menu: {
+        exclude: true,
+    }
+}
 
 interface CalendarEntryFormProps {
     calendarEntry?: CalendarEntryRecord | null;

@@ -11,7 +11,6 @@ import jakarta.persistence.Version;
 public abstract class AbstractEntity {
 
     @Id
-    // TODO: reconsider generation type for users considering enumeration?
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "idgenerator")
     // The initial value is to account for data.sql demo data ids
     @SequenceGenerator(name = "idgenerator", initialValue = 1000)

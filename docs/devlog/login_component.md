@@ -1,0 +1,1 @@
+The login component does not provide slots for adaptation so a custom component for registration would be necessary.
