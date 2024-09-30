@@ -6,6 +6,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.PositiveOrZero;
 
 import java.time.LocalDate;
@@ -25,6 +26,7 @@ public class CalendarEntry extends AbstractEntity {
     }
     
     @NotNull
+    @PastOrPresent
     private LocalDate date;
 
     @NotNull

@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from 'Frontend/auth';
 import { ViewConfig } from "@vaadin/hilla-file-router/types.js";
 import { UserService } from 'Frontend/generated/endpoints';
+import { EndpointValidationError } from '@vaadin/hilla-frontend';
 
 export const config: ViewConfig = {
     menu: { exclude: true }
@@ -30,7 +31,8 @@ const NavigateAndReload: React.FC<NavigateAndReloadProps> = ({ to }) => {
  */
 export default function Auth() {
     const { state, login } = useAuth();
-    const [hasError, setError] = useState<boolean>();
+    const [hasDefaultError, setError] = useState<boolean>();
+    const [errorMessage, setErrorMessage] = useState<string>();
     const [url, setUrl] = useState<string>();
 
     const navigate = useNavigate();
@@ -56,7 +58,10 @@ export default function Auth() {
         try {
             const userInfo = await UserService.register(username, password);
         } catch (e) {
-            setError(true);
+            if (e instanceof EndpointValidationError) {
+                setError(true);
+                setErrorMessage(e.validationErrorData[0].validatorMessage);
+            }
         }
     }
 
@@ -87,10 +92,18 @@ export default function Auth() {
         if (isInRegisterMode) {
             text.form.title = "Register";
             text.form.submit = "Register";
+
+            if (errorMessage) {
+                text.errorMessage.title = "Registration failed";
+                text.errorMessage.message = errorMessage;
+            }
+        } else {
+            text.errorMessage.title = "Incorrect username or password";
+            text.errorMessage.message = "Check that you have entered the correct username and password and try again.";
         }
 
         return text
-    }, [isInRegisterMode]);
+    }, [isInRegisterMode, errorMessage]);
 
        
 
@@ -98,7 +111,7 @@ export default function Auth() {
         <div className="grid grid-cols-[1fr_1.6fr] h-full items-center">
             <main className="flex flex-col justify-center items-center">
                 <LoginForm
-                    error={hasError}
+                    error={hasDefaultError}
                     noForgotPassword
                     autofocus
                     title={'Calendarian'}
