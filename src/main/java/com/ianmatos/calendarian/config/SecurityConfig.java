@@ -2,8 +2,10 @@ package com.ianmatos.calendarian.config;
 
 import javax.sql.DataSource;
 
+import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -56,12 +58,24 @@ public class SecurityConfig extends VaadinWebSecurity {
       return new BCryptPasswordEncoder(BCryptVersion.$2Y, 12);
   }
 
+  /*
   @Bean
   public DataSource dataSource() {
       return new EmbeddedDatabaseBuilder()
         .setType(EmbeddedDatabaseType.H2)
         .addScript(JdbcDaoImpl.DEFAULT_USER_SCHEMA_DDL_LOCATION)
         .build();
+  }
+  */
+
+  @Bean
+  @Primary
+  public DataSource dataSource() {
+      return DataSourceBuilder.create()
+          .url("jdbc:mysql://localhost:33060/db_example")
+          .username("springuser")
+          .password("ThePassword")
+          .build();
   }
 
   @Bean
