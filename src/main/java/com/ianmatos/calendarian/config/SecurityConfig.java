@@ -68,7 +68,7 @@ public class SecurityConfig extends VaadinWebSecurity {
   }
   */
 
-  @Bean
+  /*@Bean
   @Primary
   public DataSource dataSource() {
       return DataSourceBuilder.create()
@@ -76,7 +76,7 @@ public class SecurityConfig extends VaadinWebSecurity {
           .username("springuser")
           .password("ThePassword")
           .build();
-  }
+  }*/
 
   @Bean
   public UserDetailsManager users(DataSource dataSource) {

@@ -1,17 +1,33 @@
 services:
-  mysql:
+  db-mysql:
+    image: 'mysql:9.0.0'
     container_name: 'db-mysql'
-    image: 'mysql:latest'
     environment:
-      - 'MYSQL_DATABASE=calendarian-db'
-      - 'MYSQL_PASSWORD=secret'
-      - 'MYSQL_ROOT_PASSWORD=verysecret'
-      - 'MYSQL_USER=myuser'
+      MYSQL_DATABASE: calendarian
+      MYSQL_PASSWORD: secret
+      MYSQL_ROOT_PASSWORD: verysecret
+      MYSQL_USER: myuser
     ports:
-      - '3306:3306'
+      - '3307:3306'
+    networks:
+      - calendarian-net
   hilla:
+    build: .
     container_name: 'hilla'
-    build:
-      dockerfile: Dockerfile
+    depends_on:
+      - db-mysql
+    volumes:
+      - ./:/usr/src/calendarian
+    working_dir: /usr/src/calendarian
     ports:
-      - '8080:8080'
+      - "8080:8080"
+    networks:
+      - calendarian-net
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db-mysql:3306/calendarian?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: verysecret
+      SPRING_PROFILES_ACTIVE: docker
+networks:
+  calendarian-net:
+    driver: bridge
