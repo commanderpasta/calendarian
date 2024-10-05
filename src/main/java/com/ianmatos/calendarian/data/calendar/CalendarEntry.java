@@ -12,7 +12,7 @@ import jakarta.validation.constraints.PositiveOrZero;
 import java.time.LocalDate;
 
 import com.ianmatos.calendarian.data.AbstractEntity;
-import com.ianmatos.calendarian.data.client.Client;
+import com.ianmatos.calendarian.data.user.User;
 import com.vaadin.hilla.Nullable;
 
 @Entity
@@ -37,18 +37,18 @@ public class CalendarEntry extends AbstractEntity {
     private int hoursOfSleep;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "client.id")
-    private Client client;
+    @JoinColumn(name = "username")
+    private User user;
 
     @Nullable
     private String note;
 
-    public CalendarEntry(LocalDate date, Mood mood, int hoursOfSleep, String note, Client client) {
+    public CalendarEntry(LocalDate date, Mood mood, int hoursOfSleep, String note, User user) {
         this.date = date;
         this.mood = mood;
         this.hoursOfSleep = hoursOfSleep;
         this.note = note;
-        this.client = client;
+        this.user = user;
     }
 
     public CalendarEntry() {
@@ -86,11 +86,11 @@ public class CalendarEntry extends AbstractEntity {
         this.date = date;
     }
 
-    public Client getClient() {
-        return client;
+    public User getUser() {
+        return user;
     }
 
-    public void setClient(Client client) {
-        this.client = client;
+    public void setUser(User user) {
+        this.user = user;
     }
 }

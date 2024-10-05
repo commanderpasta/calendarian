@@ -4,9 +4,8 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.ianmatos.calendarian.data.client.Client;
-
+import com.ianmatos.calendarian.data.user.User;
 
 public interface CalendarEntryRepository extends JpaRepository<CalendarEntry, Long> {
-    List<CalendarEntry> findByClient(Client client);
+    List<CalendarEntry> findByUser(User user);
 }

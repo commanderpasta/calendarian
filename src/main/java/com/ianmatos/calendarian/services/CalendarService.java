@@ -5,8 +5,8 @@ import java.util.List;
 
 import com.ianmatos.calendarian.data.calendar.CalendarEntry;
 import com.ianmatos.calendarian.data.calendar.CalendarEntryRepository;
-import com.ianmatos.calendarian.data.client.Client;
-import com.ianmatos.calendarian.data.client.ClientRepository;
+import com.ianmatos.calendarian.data.user.User;
+import com.ianmatos.calendarian.data.user.UserRepository;
 import com.vaadin.flow.server.VaadinRequest;
 import com.vaadin.hilla.Endpoint;
 import com.vaadin.hilla.Nonnull;
@@ -20,11 +20,11 @@ import jakarta.validation.constraints.PositiveOrZero;
 @PermitAll
 public class CalendarService {
     private final CalendarEntryRepository calendarRepository;
-    private final ClientRepository clientRepository;
+    private final UserRepository userRepository;
 
-    public CalendarService(CalendarEntryRepository calendarRepository, ClientRepository clientRepository) {
+    public CalendarService(CalendarEntryRepository calendarRepository, UserRepository userRepository) {
         this.calendarRepository = calendarRepository;
-        this.clientRepository = clientRepository;
+        this.userRepository = userRepository;
     }
 
     public record CalendarEntryRecord(
@@ -58,16 +58,16 @@ public class CalendarService {
 
     public List<CalendarEntryRecord> findMyCalendar() {
         String username = VaadinRequest.getCurrent().getUserPrincipal().getName();
-        Client client = clientRepository.findByUsername(username);
+        User user = userRepository.findByUsername(username);
 
-        List<CalendarEntry> userCalendar = calendarRepository.findByClient(client);
+        List<CalendarEntry> userCalendar = calendarRepository.findByUser(user);
         return userCalendar.stream()
                 .map(this::toCalendarEntryRecord).toList();
     }
 
     public CalendarEntryRecord save(CalendarEntryRecord calendarEntry) {
         String username = VaadinRequest.getCurrent().getUserPrincipal().getName();
-        Client client = clientRepository.findByUsername(username);
+        User user = userRepository.findByUsername(username);
 
         CalendarEntry dbCalendarEntry;
 
@@ -81,7 +81,7 @@ public class CalendarService {
         dbCalendarEntry.setMood(calendarEntry.mood);
         dbCalendarEntry.setHoursOfSleep(calendarEntry.hoursOfSleep);
         dbCalendarEntry.setNote(calendarEntry.note);
-        dbCalendarEntry.setClient(client);
+        dbCalendarEntry.setUser(user);
 
         var saved = calendarRepository.save(dbCalendarEntry);
 

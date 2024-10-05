@@ -2,18 +2,14 @@ package com.ianmatos.calendarian.config;
 
 import javax.sql.DataSource;
 
-import org.springframework.boot.jdbc.DataSourceBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder.BCryptVersion;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -32,6 +28,8 @@ import com.vaadin.hilla.route.RouteUtil;
 public class SecurityConfig extends VaadinWebSecurity {
 
   private final RouteUtil routeUtil;
+  @Autowired
+  private DataSource dataSource;
 
   public SecurityConfig(RouteUtil routeUtil) {
     this.routeUtil = routeUtil;
@@ -41,7 +39,7 @@ public class SecurityConfig extends VaadinWebSecurity {
   protected void configure(HttpSecurity http) throws Exception {
     // Set default security policy that permits Hilla internal requests and
     // denies all other
-    http.authorizeHttpRequests(registry -> registry.requestMatchers(
+    http.userDetailsService(userDetailsService(passwordEncoder())).authorizeHttpRequests(registry -> registry.requestMatchers(
             routeUtil::isRouteAllowed).permitAll());
     super.configure(http);
     // use a custom login view and redirect to root on logout
@@ -58,36 +56,19 @@ public class SecurityConfig extends VaadinWebSecurity {
       return new BCryptPasswordEncoder(BCryptVersion.$2Y, 12);
   }
 
-  /*
   @Bean
-  public DataSource dataSource() {
-      return new EmbeddedDatabaseBuilder()
-        .setType(EmbeddedDatabaseType.H2)
-        .addScript(JdbcDaoImpl.DEFAULT_USER_SCHEMA_DDL_LOCATION)
-        .build();
-  }
-  */
-
-  /*@Bean
-  @Primary
-  public DataSource dataSource() {
-      return DataSourceBuilder.create()
-          .url("jdbc:mysql://localhost:33060/db_example")
-          .username("springuser")
-          .password("ThePassword")
-          .build();
-  }*/
-
-  @Bean
-  public UserDetailsManager users(DataSource dataSource) {
+  public UserDetailsManager userDetailsService(PasswordEncoder passwordEncoder) {
     JdbcUserDetailsManager userDetailsManager = new JdbcUserDetailsManager(dataSource);
 
-    UserDetails user = User.builder()
+    if (!userDetailsManager.userExists("user")) {
+      UserDetails user = User.builder()
         .username("user")
         .password(passwordEncoder().encode("password"))
         .roles("USER")
         .build();
-    userDetailsManager.createUser(user);
+      userDetailsManager.createUser(user);
+    }
     return userDetailsManager;
+
   }
 }

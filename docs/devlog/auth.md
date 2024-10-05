@@ -10,3 +10,6 @@ After a day of work, it seems to be true, in accordance with [this GitHub issue]
 # Client-side authentication
 While the docs are adamant on migrating to file-based routing with Vaadin 24.4, the [docs considering authentication](https://vaadin.com/docs/latest/hilla/guides/security/spring-login#protect-hilla-views) disregard this entirely, so understand the routing mechanisms is left to the user.
 
+
+# IDK
+Hope this [tutorial](https://archive.is/65pEt) helps.
