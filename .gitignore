@@ -43,4 +43,4 @@ out/
 # Env
 .env
 .flow-node-tasks.lock
-./data/
+data/**
