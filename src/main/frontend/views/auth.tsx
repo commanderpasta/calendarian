@@ -57,6 +57,14 @@ export default function Auth() {
     const handleRegister = async (username: string, password: string) => {
         try {
             const userInfo = await UserService.register(username, password);
+
+            const { defaultUrl, error, redirectUrl } = await login(username, password);
+
+            if (error) {
+                setError(true);
+            } else {
+                setUrl(redirectUrl ?? defaultUrl ?? '/');
+            }
         } catch (e) {
             if (e instanceof EndpointValidationError) {
                 setError(true);

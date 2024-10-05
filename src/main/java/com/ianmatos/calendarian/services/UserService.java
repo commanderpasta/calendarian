@@ -36,7 +36,7 @@ public class UserService {
     ) {}
 
     @AnonymousAllowed
-    public void register(@NotNull @Length(min=4, max=50) String username, @NotNull @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$", message = "Password must contain a minimum of eight characters, at least one letter, one number and one special character.") String password) {
+    public void register(@NotNull @Length(min=4, max=50) String username, @NotNull @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&_\\-/\\\\])[A-Za-z\\d@$!%*#?&_\\-/\\\\]{8,}$", message = "Password must contain a minimum of eight characters, at least one letter, one number and one special character.") String password) {
         if(userDetailsManager.userExists(username)) {
             throw new EndpointException("User exists");
         }
