@@ -43,7 +43,7 @@ public class SecurityConfig extends VaadinWebSecurity {
             routeUtil::isRouteAllowed).permitAll());
     super.configure(http);
     // use a custom login view and redirect to root on logout
-    setLoginView(http, "/login", "/");
+    setLoginView(http, "/auth", "/");
   }
 
   @Override

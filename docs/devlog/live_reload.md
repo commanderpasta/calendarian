@@ -1,0 +1,1 @@
+Vaadin Live Reload provides DevTools for the frontend, which are mapped to a hardcoded port. as stated [in the docs](https://vaadin.com/docs/v14/flow/configuration/live-reload/spring-boot#limitations). Therefore using them through a docker container prevents the browser from being able to connect, even when the port is forwarded.

@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from 'Frontend/auth';
 import { ViewConfig } from "@vaadin/hilla-file-router/types.js";
 import { UserService } from 'Frontend/generated/endpoints';
-import { EndpointValidationError } from '@vaadin/hilla-frontend';
+import { EndpointError, EndpointResponseError, EndpointValidationError } from '@vaadin/hilla-frontend';
 
 export const config: ViewConfig = {
     menu: { exclude: true }
@@ -46,7 +46,7 @@ export default function Auth() {
         }
 
         const { defaultUrl, error, redirectUrl } = await login(username, password);
-
+        console.debug(defaultUrl, error, redirectUrl);
         if (error) {
             setError(true);
         } else {
@@ -69,6 +69,9 @@ export default function Auth() {
             if (e instanceof EndpointValidationError) {
                 setError(true);
                 setErrorMessage(e.validationErrorData[0].validatorMessage);
+            } else if (e instanceof EndpointError) {
+                setError(true);
+                setErrorMessage(e.message);
             }
         }
     }
@@ -125,12 +128,12 @@ export default function Auth() {
                     title={'Calendarian'}
                     onLogin={handleLogin}
                     i18n={i18n}
+                    onChange={() => setError(false)}
                 >
                 </LoginForm>
-                <a href="/auth#" onClick={() => setRegisterMode(!isInRegisterMode)}>{isInRegisterMode ? "I have an account" : "Create an account"}</a>
+                <a href="/auth#" slot="custom-form-area" onClick={() => setRegisterMode(!isInRegisterMode)}>{isInRegisterMode ? "I have an account" : "Create an account"}</a>
             </main>
-            <div className="bg-purple-400 h-full">
-            </div>
+            <div className="bg-purple-400 h-full" />
         </div>
 
     );

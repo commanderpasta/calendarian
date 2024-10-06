@@ -10,6 +10,7 @@ import Mood from "Frontend/generated/com/ianmatos/calendarian/data/calendar/Cale
 import { DatePicker } from "@vaadin/react-components/DatePicker.js";
 import { NumberField } from "@vaadin/react-components/NumberField.js";
 import { ViewConfig } from "@vaadin/hilla-file-router/types.js";
+import dayjs from "dayjs";
 
 export const config: ViewConfig = {
     loginRequired: true,
@@ -43,7 +44,7 @@ export default function CalendarEntryForm({calendarEntry, onSubmit}: CalendarEnt
 
     return (
         <div className="flex flex-col gap-s items-start">
-            <DatePicker label="Date" {...field(model.date)} />
+            <DatePicker initialPosition={dayjs().toISOString()} max={dayjs().toISOString()} label="Date" {...field(model.date)} />
             <Select label="Mood" items={moods} {...field(model.mood)} />
             <NumberField label="Sleep (in h)" {...field(model.hoursOfSleep)} />
             <TextField label="Notes" {...field(model.note)} />

@@ -9,5 +9,5 @@ export const { router, routes } = new RouterConfigurationBuilder()
     ]
   )
   .withFileRoutes(fileRoutes) // use file router for remaining routes
-  .protect('/login')
+  .protect('/auth')
   .build(); 

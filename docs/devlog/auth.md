@@ -12,4 +12,7 @@ While the docs are adamant on migrating to file-based routing with Vaadin 24.4, 
 
 
 # IDK
-Hope this [tutorial](https://archive.is/65pEt) helps.
+Hope this [tutorial](https://archive.is/65pEt) helps. Result: It has!
+
+# hilla-react-auth
+Using a non-standard login route is difficult to configure, as login attempts are made to /login, even though /auth has been set as login view in SecurityConfig.java (and in the frontend).
