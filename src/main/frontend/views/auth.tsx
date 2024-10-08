@@ -70,11 +70,19 @@ export default function Auth() {
         return text
     }, [isInRegisterMode, errorMessage]);
 
-    const loginFormRef = useRef(null);
-
-    const navigate = useNavigate();
     if (state.user) {
         return <NavigateAndReload to={"/"} />;
+    }
+
+    const doLogin = async (username: string, password: string) => {
+        const { defaultUrl, error, redirectUrl } = await login(username, password);
+
+        if (error) {
+            setError(true);
+        } else {
+            //setUrl(redirectUrl ?? defaultUrl ?? '/');
+            setUrl("/calendar");
+        }
     }
 
     const handleLogin = async ({ detail: { username, password } }: LoginOverlayLoginEvent) => {
@@ -82,26 +90,13 @@ export default function Auth() {
             return handleRegister(username, password);
         }
 
-        const { defaultUrl, error, redirectUrl } = await login(username, password);
-        console.debug(defaultUrl, error, redirectUrl);
-        if (error) {
-            setError(true);
-        } else {
-            setUrl(redirectUrl ?? defaultUrl ?? '/');
-        }
+        await doLogin(username, password);
     }
 
     const handleRegister = async (username: string, password: string) => {
         try {
             await UserService.register(username, password);
-
-            const { defaultUrl, error, redirectUrl } = await login(username, password);
-
-            if (error) {
-                setError(true);
-            } else {
-                setUrl(redirectUrl ?? defaultUrl ?? '/');
-            }
+            await doLogin(username, password);
         } catch (e) {
             if (e instanceof EndpointValidationError) {
                 setError(true);
