@@ -1,5 +1,5 @@
 import { LoginForm, LoginI18n, LoginOverlayLoginEvent } from '@vaadin/react-components';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from 'Frontend/auth';
 import { ViewConfig } from "@vaadin/hilla-file-router/types.js";
@@ -7,7 +7,7 @@ import { UserService } from 'Frontend/generated/endpoints';
 import { EndpointError, EndpointValidationError } from '@vaadin/hilla-frontend';
 
 export const config: ViewConfig = {
-    menu: { exclude: true }
+    menu: { exclude: true },
 }
 
 interface NavigateAndReloadProps {
@@ -34,54 +34,8 @@ export default function Auth() {
     const [hasDefaultError, setError] = useState<boolean>();
     const [errorMessage, setErrorMessage] = useState<string>();
     const [url, setUrl] = useState<string>();
-
-    const navigate = useNavigate();
-    if (state.user) {
-        navigate("/", {replace: true}); // no authentication needed, just forward        
-    }
-
-    const handleLogin = async ({ detail: { username, password } }: LoginOverlayLoginEvent) => {
-        if (isInRegisterMode) {
-            return handleRegister(username, password);
-        }
-
-        const { defaultUrl, error, redirectUrl } = await login(username, password);
-        console.debug(defaultUrl, error, redirectUrl);
-        if (error) {
-            setError(true);
-        } else {
-            setUrl(redirectUrl ?? defaultUrl ?? '/');
-        }
-    }
-
-    const handleRegister = async (username: string, password: string) => {
-        try {
-            const userInfo = await UserService.register(username, password);
-
-            const { defaultUrl, error, redirectUrl } = await login(username, password);
-
-            if (error) {
-                setError(true);
-            } else {
-                setUrl(redirectUrl ?? defaultUrl ?? '/');
-            }
-        } catch (e) {
-            if (e instanceof EndpointValidationError) {
-                setError(true);
-                setErrorMessage(e.validationErrorData[0].validatorMessage);
-            } else if (e instanceof EndpointError) {
-                setError(true);
-                setErrorMessage(e.message);
-            }
-        }
-    }
-
-    if (state.user && url) {
-        const path = new URL(url, document.baseURI).pathname;
-        return <NavigateAndReload to={path} />;
-    }
-
     const [isInRegisterMode, setRegisterMode] = useState<boolean>();
+
     const i18n = useMemo<LoginI18n>(() => {
         let text = {
             form: {
@@ -116,7 +70,53 @@ export default function Auth() {
         return text
     }, [isInRegisterMode, errorMessage]);
 
-       
+    const loginFormRef = useRef(null);
+
+    const navigate = useNavigate();
+    if (state.user) {
+        return <NavigateAndReload to={"/"} />;
+    }
+
+    const handleLogin = async ({ detail: { username, password } }: LoginOverlayLoginEvent) => {
+        if (isInRegisterMode) {
+            return handleRegister(username, password);
+        }
+
+        const { defaultUrl, error, redirectUrl } = await login(username, password);
+        console.debug(defaultUrl, error, redirectUrl);
+        if (error) {
+            setError(true);
+        } else {
+            setUrl(redirectUrl ?? defaultUrl ?? '/');
+        }
+    }
+
+    const handleRegister = async (username: string, password: string) => {
+        try {
+            await UserService.register(username, password);
+
+            const { defaultUrl, error, redirectUrl } = await login(username, password);
+
+            if (error) {
+                setError(true);
+            } else {
+                setUrl(redirectUrl ?? defaultUrl ?? '/');
+            }
+        } catch (e) {
+            if (e instanceof EndpointValidationError) {
+                setError(true);
+                setErrorMessage(e.validationErrorData[0].validatorMessage);
+            } else if (e instanceof EndpointError) {
+                setError(true);
+                setErrorMessage(e.message);
+            }
+        }
+    }
+
+    if (state.user && url) {
+        const path = new URL(url, document.baseURI).pathname;
+        return <NavigateAndReload to={path} />;
+    }
 
     return (
         <div className="grid grid-cols-[1fr_1.6fr] h-full items-center">
@@ -129,6 +129,7 @@ export default function Auth() {
                     onLogin={handleLogin}
                     i18n={i18n}
                     onChange={() => setError(false)}
+                    ref={loginFormRef}
                 >
                 </LoginForm>
                 <a href="/auth#" slot="custom-form-area" onClick={() => setRegisterMode(!isInRegisterMode)}>{isInRegisterMode ? "I have an account" : "Create an account"}</a>
