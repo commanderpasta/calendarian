@@ -124,7 +124,6 @@ export default function Auth() {
                     onLogin={handleLogin}
                     i18n={i18n}
                     onChange={() => setError(false)}
-                    ref={loginFormRef}
                 >
                 </LoginForm>
                 <a href="/auth#" slot="custom-form-area" onClick={() => setRegisterMode(!isInRegisterMode)}>{isInRegisterMode ? "I have an account" : "Create an account"}</a>
