@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from 'Frontend/auth';
 import { ViewConfig } from "@vaadin/hilla-file-router/types.js";
 import { UserService } from 'Frontend/generated/endpoints';
-import { EndpointError, EndpointResponseError, EndpointValidationError } from '@vaadin/hilla-frontend';
+import { EndpointError, EndpointValidationError } from '@vaadin/hilla-frontend';
 
 export const config: ViewConfig = {
     menu: { exclude: true }

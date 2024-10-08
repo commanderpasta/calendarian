@@ -10,4 +10,5 @@ export const { router, routes } = new RouterConfigurationBuilder()
   )
   .withFileRoutes(fileRoutes) // use file router for remaining routes
   .protect('/auth')
+  //.withFallback(PageNotFoundReactComponent) TODO
   .build(); 

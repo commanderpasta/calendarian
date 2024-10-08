@@ -5,7 +5,7 @@ export const config: ViewConfig = {
 }
 
 /**
- * Hilla view that is available publicly.
+ * Publicly visible landing page.
  */
 export default function Public() {
     return (

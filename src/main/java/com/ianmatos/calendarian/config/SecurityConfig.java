@@ -5,6 +5,7 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -44,6 +45,7 @@ public class SecurityConfig extends VaadinWebSecurity {
     super.configure(http);
     // use a custom login view and redirect to root on logout
     setLoginView(http, "/auth", "/");
+    http.formLogin(formLogin -> formLogin.loginProcessingUrl("/login"));
   }
 
   @Override
