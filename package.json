@@ -1,5 +1,5 @@
 {
-  "name": "no-name",
+  "name": "calendarian",
   "license": "UNLICENSED",
   "type": "module",
   "dependencies": {
@@ -56,6 +56,7 @@
     "autoprefixer": "^10.4.19",
     "glob": "10.4.5",
     "postcss": "^8.4.38",
+    "prettier": "*",
     "rollup-plugin-brotli": "3.1.0",
     "rollup-plugin-visualizer": "5.12.0",
     "strip-css-comments": "5.0.0",
@@ -160,6 +161,6 @@
       "workbox-core": "7.1.0",
       "workbox-precaching": "7.1.0"
     },
-    "hash": "3afa89d6d3d3bac78f637857a974d22e8ad63a9dac79414ac941e623c34ee0f0"
+    "hash": "81bd4333ec2bf340199e2e2fbe75ae255775c6033b59cdd235a72bf03d4f51ad"
   }
 }

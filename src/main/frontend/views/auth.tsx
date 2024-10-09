@@ -1,5 +1,5 @@
 import { LoginForm, LoginI18n, LoginOverlayLoginEvent } from '@vaadin/react-components';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { Suspense, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from 'Frontend/auth';
 import { ViewConfig } from "@vaadin/hilla-file-router/types.js";
@@ -46,10 +46,10 @@ export default function Auth() {
                 forgotPassword: 'Forgot password?',
             },
             errorMessage: {
-              title: "Incorrect username or password",
-              message: "Check that you have entered the correct username and password and try again.",
-              username: "Username is required",
-              password: "Password is required",
+                title: "Incorrect username or password",
+                message: "Check that you have entered the correct username and password and try again.",
+                username: "Username is required",
+                password: "Password is required",
             },
             //additionalInformation: 'Jos tarvitset lisätietoja käyttäjälle.',
         };
@@ -69,10 +69,6 @@ export default function Auth() {
 
         return text
     }, [isInRegisterMode, errorMessage]);
-
-    if (state.user) {
-        return <NavigateAndReload to={"/"} />;
-    }
 
     const doLogin = async (username: string, password: string) => {
         const { defaultUrl, error, redirectUrl } = await login(username, password);
@@ -108,28 +104,36 @@ export default function Auth() {
         }
     }
 
-    if (state.user && url) {
-        const path = new URL(url, document.baseURI).pathname;
-        return <NavigateAndReload to={path} />;
+    if (state.user) {
+        return <NavigateAndReload to={"/calendar"} />;
     }
 
     return (
         <div className="grid grid-cols-[1fr_1.6fr] h-full items-center">
             <main className="flex flex-col justify-center items-center">
-                <LoginForm
-                    error={hasDefaultError}
-                    noForgotPassword
-                    autofocus
-                    title={'Calendarian'}
-                    onLogin={handleLogin}
-                    i18n={i18n}
-                    onChange={() => setError(false)}
-                >
-                </LoginForm>
-                <a href="/auth#" slot="custom-form-area" onClick={() => setRegisterMode(!isInRegisterMode)}>{isInRegisterMode ? "I have an account" : "Create an account"}</a>
+                {state.initializing || state.loading ?
+                    <LoadingIndicator />
+                    :
+                    <><LoginForm
+                        error={hasDefaultError}
+                        noForgotPassword
+                        autofocus
+                        title={'Calendarian'}
+                        onLogin={handleLogin}
+                        i18n={i18n}
+                        onChange={() => setError(false)}
+                    >
+                    </LoginForm><a href="/auth#" slot="custom-form-area" onClick={() => setRegisterMode(!isInRegisterMode)}>{isInRegisterMode ? "I have an account" : "Create an account"}</a></>
+                }
             </main>
             <div className="bg-purple-400 h-full" />
         </div>
-
     );
 }
+
+const LoadingIndicator = () => (
+    <div className="flex justify-center items-center h-full">
+        <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full text-purple-500"></div>
+        <span className="ml-4">Loading...</span>
+    </div>
+);
