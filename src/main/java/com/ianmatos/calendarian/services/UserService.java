@@ -17,7 +17,6 @@ import com.vaadin.hilla.Nonnull;
 import com.vaadin.hilla.exception.EndpointException;
 
 import jakarta.annotation.security.PermitAll;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 
 @BrowserCallable
@@ -36,7 +35,7 @@ public class UserService {
     ) {}
 
     @AnonymousAllowed
-    public void register(@NotNull @Length(min=4, max=50) String username, @NotNull @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&_\\-/\\\\])[A-Za-z\\d@$!%*#?&_\\-/\\\\]{8,}$", message = "Password must contain a minimum of eight characters, at least one letter, one number and one special character.") String password) {
+    public void register(@Nonnull @Length(min=4, max=50) String username, @Nonnull @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&_\\-/\\\\])[A-Za-z\\d@$!%*#?&_\\-/\\\\]{8,}$", message = "Password must contain a minimum of eight characters, at least one letter, one number and one special character.") String password) {
         if(userDetailsManager.userExists(username)) {
             throw new EndpointException("User exists");
         }

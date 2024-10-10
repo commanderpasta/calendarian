@@ -5,6 +5,7 @@ import { useAuth } from 'Frontend/auth';
 import { ViewConfig } from "@vaadin/hilla-file-router/types.js";
 import { UserService } from 'Frontend/generated/endpoints';
 import { EndpointError, EndpointValidationError } from '@vaadin/hilla-frontend';
+import LoadingIndicator from 'Frontend/components/LoadingIndicator';
 
 export const config: ViewConfig = {
     menu: { exclude: true },
@@ -130,10 +131,3 @@ export default function Auth() {
         </div>
     );
 }
-
-const LoadingIndicator = () => (
-    <div className="flex justify-center items-center h-full">
-        <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full text-purple-500"></div>
-        <span className="ml-4">Loading...</span>
-    </div>
-);

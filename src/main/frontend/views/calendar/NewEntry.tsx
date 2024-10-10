@@ -1,8 +1,8 @@
-import {TextField} from "@vaadin/react-components/TextField";
-import {Select, SelectItem} from "@vaadin/react-components/Select";
-import {Button} from "@vaadin/react-components/Button";
-import {useForm, useFormPart} from "@vaadin/hilla-react-form";
-import {useEffect, useState} from "react";
+import { TextField } from "@vaadin/react-components/TextField";
+import { Select, SelectItem } from "@vaadin/react-components/Select";
+import { Button } from "@vaadin/react-components/Button";
+import { useForm, useFormPart } from "@vaadin/hilla-react-form";
+import { useEffect, useState } from "react";
 
 import CalendarEntryRecordModel from "Frontend/generated/com/ianmatos/calendarian/services/CalendarService/CalendarEntryRecordModel";
 import CalendarEntryRecord from "Frontend/generated/com/ianmatos/calendarian/services/CalendarService/CalendarEntryRecord";
@@ -11,6 +11,7 @@ import { DatePicker } from "@vaadin/react-components/DatePicker.js";
 import { NumberField } from "@vaadin/react-components/NumberField.js";
 import { ViewConfig } from "@vaadin/hilla-file-router/types.js";
 import dayjs from "dayjs";
+import { _validators } from "@vaadin/hilla-lit-form";
 
 export const config: ViewConfig = {
     loginRequired: true,
@@ -24,15 +25,19 @@ interface CalendarEntryFormProps {
     onSubmit?: (contact: CalendarEntryRecord) => Promise<void>;
 }
 
-export default function CalendarEntryForm({calendarEntry, onSubmit}: CalendarEntryFormProps) {
+export default function CalendarEntryForm({ calendarEntry, onSubmit }: CalendarEntryFormProps) {
 
     const [moods, setMoods] = useState<SelectItem[]>([]);
 
-    const {field, model, submit, reset, read} = useForm(CalendarEntryRecordModel, { onSubmit } );
-    const moodField = useFormPart(model.mood);
+    const { field, model, submit, reset, read, dirty } = useForm(CalendarEntryRecordModel, { onSubmit });
+    const { setValue } = useFormPart(model.date);
 
     useEffect(() => {
-        read(calendarEntry);
+        if (calendarEntry) {
+            read(calendarEntry);
+        } else {
+            setValue(dayjs().toISOString());
+        }
 
         setMoods(Object.values(Mood).map(mood => {
             return {
@@ -40,16 +45,18 @@ export default function CalendarEntryForm({calendarEntry, onSubmit}: CalendarEnt
                 value: mood.toString(),
             };
         }));
-    }, [calendarEntry]);
+    }, []);
+
+    console.log('Form dirty state:', dirty);
 
     return (
         <div className="flex flex-col gap-s items-start">
-            <DatePicker initialPosition={dayjs().toISOString()} max={dayjs().toISOString()} label="Date" {...field(model.date)} />
-            <Select label="Mood" items={moods} {...field(model.mood)} />
+            <DatePicker max={dayjs().toISOString()} label="Date" required {...field(model.date)} />
+            <Select label="Mood" required items={moods} {...field(model.mood)} />
             <NumberField label="Sleep (in h)" {...field(model.hoursOfSleep)} />
             <TextField label="Notes" {...field(model.note)} />
             <div className="flex gap-m">
-                <Button onClick={submit} theme="primary">Save</Button>
+                <Button onClick={submit} disabled={!dirty} theme="primary">Save</Button>
                 <Button onClick={reset}>Reset</Button>
             </div>
         </div>

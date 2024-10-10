@@ -5,6 +5,7 @@ import { CalendarService } from "Frontend/generated/endpoints";
 import dayjs from "dayjs";
 import CalendarElement from "../../components/CalendarElement";
 import { ViewConfig } from "@vaadin/hilla-file-router/types.js";
+import LoadingIndicator from "Frontend/components/LoadingIndicator";
 
 export const config: ViewConfig = {
   loginRequired: true,
@@ -15,8 +16,11 @@ export default function CalendarView() {
   const [calendarByDay, setCalendarByDay] = useState<Map<Date, CalendarEntryRecord>>(new Map<Date, CalendarEntryRecord>());
 
   const [isAddingEntry, setAddingEntry] = useState<boolean>(false);
+  const [isLoading, setLoading] = useState<boolean>(false);
 
+  let spinnerTimeout: NodeJS.Timeout;
   useEffect(() => {
+    spinnerTimeout = setTimeout(() => { setLoading(true) }, 150);
     (CalendarService.findMyCalendar() as Promise<CalendarEntryRecord[]>).then(initCalendar);
   }, []);
 
@@ -25,6 +29,8 @@ export default function CalendarView() {
     entries.map(entry => calendarMap.set(dayjs(entry.date).toDate(), entry));
 
     setCalendarByDay(calendarMap);
+    clearTimeout(spinnerTimeout);
+    setLoading(false);
   }
 
   async function onCalendarEntrySaved(calendarEntry: CalendarEntryRecord) {
@@ -49,12 +55,15 @@ export default function CalendarView() {
           </tr>
         </thead>
         <tbody>
-          {Array.from(calendarByDay.entries()).map(([key, value]) => (
-            <CalendarElement key={key.toString()} calendarEntry={value} />
-          ))}
-
+          {
+            Array.from(calendarByDay.entries()).map(([key, value]) => (
+              <CalendarElement key={key.toString()} calendarEntry={value} />
+            ))
+          }
         </tbody>
       </table>
+
+      {isLoading && <div className="w-full my-5"><LoadingIndicator /></div>}
 
       <button onClick={e => setAddingEntry(true)} type="button">
         Add entry

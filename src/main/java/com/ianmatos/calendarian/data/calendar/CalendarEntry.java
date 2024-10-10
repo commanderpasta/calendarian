@@ -5,7 +5,6 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.PositiveOrZero;
 
@@ -14,7 +13,7 @@ import java.time.LocalDate;
 import com.ianmatos.calendarian.data.AbstractEntity;
 import com.ianmatos.calendarian.data.user.User;
 import com.vaadin.hilla.Nullable;
-
+import com.vaadin.hilla.Nonnull;
 @Entity
 public class CalendarEntry extends AbstractEntity {
     public enum Mood {
@@ -25,11 +24,11 @@ public class CalendarEntry extends AbstractEntity {
         VERYNEGATIVE
     }
     
-    @NotNull
+    @Nonnull
     @PastOrPresent
     private LocalDate date;
 
-    @NotNull
+    @Nonnull
     private Mood mood;
 
     @Nullable
