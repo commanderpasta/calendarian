@@ -1,8 +1,8 @@
 import { ViewConfig } from "@vaadin/hilla-file-router/types.js";
 
 export const config: ViewConfig = {
-    menu: { exclude: true}
-}
+    menu: { exclude: true }
+};
 
 /**
  * Publicly visible landing page.

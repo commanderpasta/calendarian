@@ -16,9 +16,9 @@ import { _validators } from "@vaadin/hilla-lit-form";
 export const config: ViewConfig = {
     loginRequired: true,
     menu: {
-        exclude: true,
+        exclude: true
     }
-}
+};
 
 interface CalendarEntryFormProps {
     calendarEntry?: CalendarEntryRecord | null;
@@ -26,10 +26,9 @@ interface CalendarEntryFormProps {
 }
 
 export default function CalendarEntryForm({ calendarEntry, onSubmit }: CalendarEntryFormProps) {
-
     const [moods, setMoods] = useState<SelectItem[]>([]);
 
-    const { field, model, submit, reset, read, dirty } = useForm(CalendarEntryRecordModel, { onSubmit });
+    const { field, model, submit, reset, read, dirty, update } = useForm(CalendarEntryRecordModel, { onSubmit });
     const { setValue } = useFormPart(model.date);
 
     useEffect(() => {
@@ -38,16 +37,18 @@ export default function CalendarEntryForm({ calendarEntry, onSubmit }: CalendarE
         } else {
             setValue(dayjs().toISOString());
         }
+        update();
+        setMoods(
+            Object.values(Mood).map((mood) => {
+                return {
+                    label: (mood.toString() as string).toLowerCase(),
+                    value: mood.toString()
+                };
+            })
+        );
 
-        setMoods(Object.values(Mood).map(mood => {
-            return {
-                label: (mood.toString() as string).toLowerCase(),
-                value: mood.toString(),
-            };
-        }));
+        console.log("Form state", model);
     }, []);
-
-    console.log('Form dirty state:', dirty);
 
     return (
         <div className="flex flex-col gap-s items-start">
@@ -56,9 +57,11 @@ export default function CalendarEntryForm({ calendarEntry, onSubmit }: CalendarE
             <NumberField label="Sleep (in h)" {...field(model.hoursOfSleep)} />
             <TextField label="Notes" {...field(model.note)} />
             <div className="flex gap-m">
-                <Button onClick={submit} disabled={!dirty} theme="primary">Save</Button>
+                <Button onClick={submit} disabled={!dirty} theme="primary">
+                    Save
+                </Button>
                 <Button onClick={reset}>Reset</Button>
             </div>
         </div>
-    )
+    );
 }

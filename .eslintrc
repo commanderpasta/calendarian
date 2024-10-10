@@ -11,6 +11,8 @@
         "@typescript-eslint/no-invalid-void-type": "off",
         "@typescript-eslint/member-ordering": "off",
         "@typescript-eslint/return-await": "off",
+        "quotes": "double",
+        "indent": ["error", 4],
         "class-methods-use-this": "off",
         "import/no-duplicates": "off",
         "import/prefer-default-export": "off",

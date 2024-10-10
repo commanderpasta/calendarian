@@ -2,7 +2,7 @@ import CalendarEntryRecord from "Frontend/generated/com/ianmatos/calendarian/ser
 import dayjs from "dayjs";
 
 interface CalendarElementProps {
-    calendarEntry: CalendarEntryRecord,
+    calendarEntry: CalendarEntryRecord;
 }
 
 export default function CalendarElement(props: CalendarElementProps) {
@@ -13,5 +13,5 @@ export default function CalendarElement(props: CalendarElementProps) {
             <td>{props.calendarEntry.hoursOfSleep}</td>
             <td>{props.calendarEntry.note}</td>
         </tr>
-    )
+    );
 }

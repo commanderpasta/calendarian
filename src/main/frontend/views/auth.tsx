@@ -1,15 +1,15 @@
-import { LoginForm, LoginI18n, LoginOverlayLoginEvent } from '@vaadin/react-components';
-import { Suspense, useEffect, useMemo, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from 'Frontend/auth';
+import { LoginForm, LoginI18n, LoginOverlayLoginEvent } from "@vaadin/react-components";
+import { Suspense, useEffect, useMemo, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "Frontend/auth";
 import { ViewConfig } from "@vaadin/hilla-file-router/types.js";
-import { UserService } from 'Frontend/generated/endpoints';
-import { EndpointError, EndpointValidationError } from '@vaadin/hilla-frontend';
-import LoadingIndicator from 'Frontend/components/LoadingIndicator';
+import { UserService } from "Frontend/generated/endpoints";
+import { EndpointError, EndpointValidationError } from "@vaadin/hilla-frontend";
+import LoadingIndicator from "Frontend/components/LoadingIndicator";
 
 export const config: ViewConfig = {
-    menu: { exclude: true },
-}
+    menu: { exclude: true }
+};
 
 interface NavigateAndReloadProps {
     to: string;
@@ -44,14 +44,14 @@ export default function Auth() {
                 username: "Username",
                 password: "Password",
                 submit: "Log in",
-                forgotPassword: 'Forgot password?',
+                forgotPassword: "Forgot password?"
             },
             errorMessage: {
                 title: "Incorrect username or password",
                 message: "Check that you have entered the correct username and password and try again.",
                 username: "Username is required",
-                password: "Password is required",
-            },
+                password: "Password is required"
+            }
             //additionalInformation: 'Jos tarvitset lisätietoja käyttäjälle.',
         };
 
@@ -68,7 +68,7 @@ export default function Auth() {
             text.errorMessage.message = "Check that you have entered the correct username and password and try again.";
         }
 
-        return text
+        return text;
     }, [isInRegisterMode, errorMessage]);
 
     const doLogin = async (username: string, password: string) => {
@@ -80,7 +80,7 @@ export default function Auth() {
             //setUrl(redirectUrl ?? defaultUrl ?? '/');
             setUrl("/calendar");
         }
-    }
+    };
 
     const handleLogin = async ({ detail: { username, password } }: LoginOverlayLoginEvent) => {
         if (isInRegisterMode) {
@@ -88,7 +88,7 @@ export default function Auth() {
         }
 
         await doLogin(username, password);
-    }
+    };
 
     const handleRegister = async (username: string, password: string) => {
         try {
@@ -103,7 +103,7 @@ export default function Auth() {
                 setErrorMessage(e.message);
             }
         }
-    }
+    };
 
     if (state.user) {
         return <NavigateAndReload to={"/calendar"} />;
@@ -112,20 +112,24 @@ export default function Auth() {
     return (
         <div className="grid grid-cols-[1fr_1.6fr] h-full items-center">
             <main className="flex flex-col justify-center items-center">
-                {state.initializing || state.loading ?
+                {state.initializing || state.loading ? (
                     <LoadingIndicator />
-                    :
-                    <><LoginForm
-                        error={hasDefaultError}
-                        noForgotPassword
-                        autofocus
-                        title={'Calendarian'}
-                        onLogin={handleLogin}
-                        i18n={i18n}
-                        onChange={() => setError(false)}
-                    >
-                    </LoginForm><a href="/auth#" slot="custom-form-area" onClick={() => setRegisterMode(!isInRegisterMode)}>{isInRegisterMode ? "I have an account" : "Create an account"}</a></>
-                }
+                ) : (
+                    <>
+                        <LoginForm
+                            error={hasDefaultError}
+                            noForgotPassword
+                            autofocus
+                            title={"Calendarian"}
+                            onLogin={handleLogin}
+                            i18n={i18n}
+                            onChange={() => setError(false)}
+                        ></LoginForm>
+                        <a href="/auth#" slot="custom-form-area" onClick={() => setRegisterMode(!isInRegisterMode)}>
+                            {isInRegisterMode ? "I have an account" : "Create an account"}
+                        </a>
+                    </>
+                )}
             </main>
             <div className="bg-purple-400 h-full" />
         </div>
