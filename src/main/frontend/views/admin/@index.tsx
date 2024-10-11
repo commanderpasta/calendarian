@@ -1,8 +1,9 @@
 import { ViewConfig } from "@vaadin/hilla-file-router/types.js";
 import { EndpointError } from "@vaadin/hilla-frontend";
 import { UserService } from "Frontend/generated/endpoints";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Notification } from "@vaadin/react-components/Notification";
+import { Grid, GridTreeColumn, GridColumn, GridDataProvider } from "@vaadin/react-components";
 
 export const config: ViewConfig = {
     loginRequired: true,
@@ -12,6 +13,9 @@ export const config: ViewConfig = {
 export default function Admin() {
     const [users, setUsers] = useState<Record<string, string[]>>({});
 
+    {
+        users;
+    }
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -30,14 +34,24 @@ export default function Admin() {
         fetchData();
     }, []);
 
+    type UserRights = {
+        user: string;
+        authorities: string;
+    };
+    const gridData: UserRights[] = useMemo(
+        () =>
+            Object.entries(users).map(([user, authorities]) => {
+                return { user: user, authorities: authorities.toString() };
+            }),
+        [users]
+    );
+
     return (
         <main>
-            {Object.entries(users).map(([user, authorities]) => (
-                <div key={user} className="flex">
-                    <div>{user}</div>
-                    <div>{authorities.join(", ")}</div>
-                </div>
-            ))}
+            <Grid items={gridData}>
+                <GridColumn path="user" />
+                <GridColumn path="authorities" />
+            </Grid>
         </main>
     );
 }
