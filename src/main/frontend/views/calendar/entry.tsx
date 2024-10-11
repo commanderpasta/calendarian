@@ -28,19 +28,21 @@ interface CalendarEntryFormProps {
 export default function CalendarEntryForm({ calendarEntry, onSubmit }: CalendarEntryFormProps) {
     const [moods, setMoods] = useState<SelectItem[]>([]);
 
-    const { field, model, submit, reset, read, dirty, setDefaultValue } = useForm(CalendarEntryRecordModel, {
+    const { field, model, submit, reset, read, dirty, setDefaultValue, value } = useForm(CalendarEntryRecordModel, {
         onSubmit
     });
 
     useEffect(() => {
         setDefaultValue({
-            date: dayjs().toISOString(),
+            date: dayjs().format("YYYY-MM-DD"),
             mood: Mood.VERYPOSITIVE,
             hoursOfSleep: 8
         });
 
         if (calendarEntry) {
             read(calendarEntry);
+        } else {
+            reset();
         }
 
         setMoods(

@@ -1,4 +1,10 @@
-export default function AboutView() {
+import { ViewConfig } from "@vaadin/hilla-file-router/types.js";
+
+export const config: ViewConfig = {
+    loginRequired: false
+};
+
+export default function Home() {
     return (
         <div className="m-4">
             <h2>Hilla full-stack tutorial app</h2>
