@@ -53,7 +53,7 @@ export default function Dashboard() {
 
         return [
             {
-                id: "xd",
+                id: "mood",
                 color: "#00a2ae",
                 data: linePoints
             }
@@ -74,7 +74,7 @@ export default function Dashboard() {
 
         return [
             {
-                id: "xd2",
+                id: "sleep",
                 color: "orange",
                 data: linePoints
             }
