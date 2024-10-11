@@ -1,6 +1,7 @@
 package com.ianmatos.calendarian.services;
 
 import java.time.LocalDate;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,23 +33,15 @@ public class CalendarService {
     }
 
     public record CalendarEntryRecord(
-            @Nullable
-            Long id,
+            @Nullable Long id,
 
-            @Nonnull
-            LocalDate date,
+            @Nonnull LocalDate date,
 
-            @NotNull
-            @NonNull
-            CalendarEntry.Mood mood,
+            @NotNull @NonNull CalendarEntry.Mood mood,
 
-            @Nullable
-            @PositiveOrZero
-            int hoursOfSleep,
+            @Nullable @PositiveOrZero int hoursOfSleep,
 
-            @Nullable
-            String note
-    ) {
+            @Nullable String note) {
     }
 
     private CalendarEntryRecord toCalendarEntryRecord(CalendarEntry c) {
@@ -57,8 +50,7 @@ public class CalendarService {
                 c.getDate(),
                 c.getMood(),
                 c.getHoursOfSleep(),
-                c.getNote()
-        );
+                c.getNote());
     }
 
     @Nonnull
@@ -70,11 +62,19 @@ public class CalendarService {
         return userCalendar.stream()
                 .map(this::toCalendarEntryRecord).toList();
     }
-    
+
+    @PermitAll
+    public Optional<CalendarEntryRecord> findOneByDate(LocalDate date) {
+        String username = VaadinRequest.getCurrent().getUserPrincipal().getName();
+        User user = userRepository.findByUsername(username);
+
+        return calendarRepository.findByUserAndDate(user, date).map(this::toCalendarEntryRecord);
+    }
+
     public void deleteById(Long calendarEntryId) throws EndpointException {
         String username = VaadinRequest.getCurrent().getUserPrincipal().getName();
         User user = userRepository.findByUsername(username);
-        CalendarEntry dbCalendarEntry; 
+        CalendarEntry dbCalendarEntry;
 
         try {
             dbCalendarEntry = calendarRepository.findById(calendarEntryId).orElseThrow();

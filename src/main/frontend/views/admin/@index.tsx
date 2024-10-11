@@ -3,7 +3,7 @@ import { EndpointError } from "@vaadin/hilla-frontend";
 import { UserService } from "Frontend/generated/endpoints";
 import { useEffect, useMemo, useState } from "react";
 import { Notification } from "@vaadin/react-components/Notification";
-import { Grid, GridTreeColumn, GridColumn, GridDataProvider } from "@vaadin/react-components";
+import { Grid, GridColumn } from "@vaadin/react-components";
 
 export const config: ViewConfig = {
     loginRequired: true,

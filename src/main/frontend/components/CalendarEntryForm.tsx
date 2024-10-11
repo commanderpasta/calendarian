@@ -26,9 +26,10 @@ interface CalendarEntryFormProps {
     opened?: boolean;
     calendarEntry?: CalendarEntryRecord | null;
     onSubmit?: (contact: CalendarEntryRecord) => Promise<void>;
+    selectedDate?: dayjs.Dayjs;
 }
 
-export default function CalendarEntryForm({ calendarEntry, onSubmit, opened }: CalendarEntryFormProps) {
+export default function CalendarEntryForm({ calendarEntry, onSubmit, opened, selectedDate }: CalendarEntryFormProps) {
     const helperText = useSignal(getRandomHelperText());
     const [moods, setMoods] = useState<SelectItem[]>([]);
 
@@ -38,7 +39,7 @@ export default function CalendarEntryForm({ calendarEntry, onSubmit, opened }: C
 
     useEffect(() => {
         setDefaultValue({
-            date: dayjs().format("YYYY-MM-DD"),
+            date: selectedDate?.format("YYYY-MM-DD") ?? dayjs().format("YYYY-MM-DD"),
             mood: Mood.VERYPOSITIVE,
             hoursOfSleep: 8
         });
@@ -57,7 +58,7 @@ export default function CalendarEntryForm({ calendarEntry, onSubmit, opened }: C
                 };
             })
         );
-    }, [calendarEntry]);
+    }, [calendarEntry, selectedDate]);
 
     useEffect(() => {
         if (opened) {
@@ -67,7 +68,10 @@ export default function CalendarEntryForm({ calendarEntry, onSubmit, opened }: C
 
     return (
         <div className="flex flex-col gap-s items-start w-full">
-            <DatePicker max={dayjs().format("YYYY-MM-DD")} label="Date" required {...field(model.date)} />
+            {!selectedDate && (
+                <DatePicker max={dayjs().format("YYYY-MM-DD")} label="Date" required {...field(model.date)} />
+            )}
+
             <Select label="Mood" required items={moods} {...field(model.mood)} />
             <IntegerField
                 label="Sleep duration"
