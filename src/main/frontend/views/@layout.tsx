@@ -17,6 +17,7 @@ export default function MainLayout() {
     const navigate = useNavigate();
 
     if (useLocation().pathname === "/") {
+        // Render landing page without drawer layout
         return (
             <AppLayout primarySection="navbar">
                 <div slot="navbar" className="flex justify-end w-full">
@@ -53,7 +54,7 @@ export default function MainLayout() {
 
     return (
         <AppLayout primarySection="drawer">
-            <div slot="navbar" className="flex justify-between w-full">
+            <div slot="navbar" className="flex justify-between w-full !h-full">
                 <span className="flex items-center">
                     <DrawerToggle aria-label="Menu toggle" />
                     <h2 className="text-l m-0">{currentTitle}</h2>

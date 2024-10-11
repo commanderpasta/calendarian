@@ -2,6 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
+html,
+:host {
     --lumo-primary-color: rgb(0, 162, 174);
+    --lumo-primary-color-10pct: hsl(from var(--lumo-primary-color) h s calc(l - 5));
+    --lumo-primary-color-50pct: hsl(from var(--lumo-primary-color) h s calc(l - 10));
+    --lumo-primary-text-color: hsl(from var(--lumo-primary-color) h s calc(l + 5));
+    --lumo-primary-contrast-color: #ffffff;
+}
+
+vaadin-app-layout::part(navbar) {
+    background-color: #f3f5f7;
 }
