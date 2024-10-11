@@ -112,27 +112,6 @@ export default function CalendarView() {
                 onOpenedChanged={({ detail }) => {
                     isDialogOpen.value = detail.value;
                 }}
-                /*footerRenderer={() => (
-                    <>
-                        <Button
-                            onClick={() => {
-                                isDialogOpen.value = false;
-                                selectedCalendarEntry.value = null;
-                            }}
-                        >
-                            Cancel
-                        </Button>
-                        <Button
-                            theme="primary"
-                            onClick={() => {
-                                isDialogOpen.value = false;
-                                selectedCalendarEntry.value = null;
-                            }}
-                        >
-                            Add
-                        </Button>
-                    </>
-                )}*/
             >
                 <div className="w-[400px]">
                     <CalendarEntryForm
