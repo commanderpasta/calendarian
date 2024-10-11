@@ -7,7 +7,7 @@ import CalendarElement from "../../components/TableCalendarElement";
 import { ViewConfig } from "@vaadin/hilla-file-router/types.js";
 import LoadingIndicator from "Frontend/components/LoadingIndicator";
 import { Notification } from "@vaadin/react-components/Notification";
-import { Button, Dialog } from "@vaadin/react-components";
+import { Button, Dialog, Grid, GridColumn, Icon } from "@vaadin/react-components";
 import { signal, useSignal } from "@vaadin/hilla-react-signals";
 import { EndpointError } from "@vaadin/hilla-frontend";
 
@@ -101,39 +101,30 @@ export default function HistoryView() {
                 </div>
             ) : (
                 <>
-                    <table className="table-auto text-left w-full">
-                        <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>Mood</th>
-                                <th>Sleep (h)</th>
-                                <th>Note</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {sortedEntries.map((entry) => (
-                                <CalendarElement
-                                    key={entry.date}
-                                    calendarEntry={entry}
-                                    onEdit={() => editEntry(entry.date)}
-                                    onDeleted={() => deleteEntry(entry.date)}
-                                />
-                            ))}
-                        </tbody>
-                    </table>
+                    <Grid items={sortedEntries} theme="wrap-cell-content row-stripes">
+                        <GridColumn path="date" />
+                        <GridColumn path="mood" />
+                        <GridColumn path="hoursOfSleep" />
+                        <GridColumn path="note" />
+                        <GridColumn header="Status">
+                            {({ item }) => (
+                                <span className="flex gap-2 max-w-fit">
+                                    <Button theme="icon" onClick={() => editEntry(item.date)}>
+                                        <Icon icon="vaadin:edit" />
+                                    </Button>
+                                    <Button theme="icon" onClick={() => deleteEntry(item.date)}>
+                                        <Icon icon="vaadin:minus-circle" />
+                                    </Button>
+                                </span>
+                            )}
+                        </GridColumn>
+                    </Grid>
 
                     {sortedEntries?.length === 0 && (
                         <div className="w-full flex justify-center">
                             <span>Nothing here yet.</span>
                         </div>
                     )}
-
-                    <div className="flex justify-start my-4">
-                        <Button onClick={() => openEditingModal()} theme="primary">
-                            Add entry
-                        </Button>
-                    </div>
 
                     <Dialog
                         headerTitle="Edit calendar entry"
