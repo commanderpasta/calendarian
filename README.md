@@ -1,22 +1,13 @@
 # Calendarian
-This is an application written using the [Hilla](https://hilla.dev) framework for mood tracking and journaling.
+
+This is a simple application written using the [Hilla](https://hilla.dev) framework for mood tracking and journaling. This is a university project, with the main goal being to build experience with the full-stack framework Hilla, which has now been integrated into Vaadin.
 
 ## Setup
 
-### Initializing the DB for the first time
-Install sqlite3 and run `sqlite3 db.sqlite < sqlite_init.sql`.
+The local environment runs on two docker containers, one for Hilla (Frontend+Backend) and one for MySQL, and can be started with `docker-compose up`.
 
-## Planned features
+A production environment has not been built. The environment variables are pre-configured (or rather hardcoded), and the initial databases for authentication are set up automatically, using JPA and a JdbcUserDetailsManager in `SecurityConfig.java`.
 
-- [ ] Use Hilla with Flux to stream notifications from backend to frontend
-- [ ] Multi-modal presentation of data with different services for the same data
+## Retrospective
 
-
-# Observations
-+ Hilla generates an OpenAPI spec from the Java endpoints ad-hoc and uses it to generate the frontend API.
-- Only officially supports React at the moment, [by choice of the developers](https://github.com/vaadin/hilla/issues/746#issuecomment-1854714358)
-
-# TODOs
-- Request error handling 
-- User authentication 
-- Use proper MySQL
+Some thoughts can be found in [a separate document on this repository](./docs/review.md).

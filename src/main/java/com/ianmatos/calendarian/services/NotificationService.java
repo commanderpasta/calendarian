@@ -16,18 +16,18 @@ import reactor.core.publisher.Flux;
 @PermitAll
 public class NotificationService {
     private static final Logger LOGGER = LoggerFactory.getLogger(NotificationService.class);
-    
-    @AnonymousAllowed
-    public Flux<@Nonnull String> getClock() {
-        return Flux.interval(Duration.ofSeconds(1))
-                .onBackpressureDrop()
-                .map(_interval -> new Date().toString());
-    }
 
-    @AnonymousAllowed
-    public EndpointSubscription<@Nonnull String> getClockCancellable() {
-        return EndpointSubscription.of(getClock(), () -> {
-            LOGGER.info("Subscription has been cancelled");
-        });
-    }
+    /*
+     * public Flux<@Nonnull String> getClock() {
+     * return Flux.interval(Duration.ofSeconds(1))
+     * .onBackpressureDrop()
+     * .map(_interval -> new Date().toString());
+     * }
+     * 
+     * public EndpointSubscription<@Nonnull String> getNotifications() {
+     * return EndpointSubscription.of(getClock(), () -> {
+     * LOGGER.info("Subscription has been cancelled");
+     * });
+     * }
+     */
 }
