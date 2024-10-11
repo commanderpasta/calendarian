@@ -37,7 +37,7 @@ export default function MoodChart(props: MoodChartProps) {
     //gridYValues = [1, 2, 3, 4, 5];
 
     return (
-        <div className="w-full h-5/6 lg:h-1/2">
+        <div className="w-full h-5/6 lg:h-1/3">
             <Suspense fallback={<LoadingIndicator />}>
                 <ResponsiveLine
                     data={props.data}
@@ -50,9 +50,10 @@ export default function MoodChart(props: MoodChartProps) {
                         max: dayjs().toDate()
                     }}
                     lineWidth={3}
-                    margin={{ top: 50, right: 80, bottom: 50, left: 80 }}
+                    margin={{ top: 20, right: 80, bottom: 30, left: 80 }}
                     curve="monotoneX"
                     colors="#00a2ae"
+                    pointSize={10}
                 />
             </Suspense>
         </div>

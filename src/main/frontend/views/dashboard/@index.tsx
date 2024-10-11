@@ -83,8 +83,10 @@ export default function Dashboard() {
 
     return (
         <main className="m-4 h-full">
-            <h2 className="text-2xl">Your 30 day trend.</h2>
+            <h1 className="text-2xl">Your 30 day trends.</h1>
+            <h2 className="text-xl mt-2">Mood</h2>
             {moodChartData?.length > 0 ? <MoodChart data={moodChartData} /> : <></>}
+            <h2 className="text-xl">Sleep duration</h2>
             {sleepChartData?.length > 0 ? <HoursChart data={sleepChartData} /> : <></>}
         </main>
     );

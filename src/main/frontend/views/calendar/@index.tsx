@@ -1,24 +1,26 @@
 import { useEffect, useState } from "react";
-import NewEntry from "./entry";
+import NewEntry from "../../components/CalendarEntryForm";
 import CalendarEntryRecord from "Frontend/generated/com/ianmatos/calendarian/services/CalendarService/CalendarEntryRecord";
 import { CalendarService } from "Frontend/generated/endpoints";
 import dayjs from "dayjs";
-import CalendarElement from "../../components/CalendarElement";
+import CalendarElement from "../../components/TableCalendarElement";
 import { ViewConfig } from "@vaadin/hilla-file-router/types.js";
 import LoadingIndicator from "Frontend/components/LoadingIndicator";
 import { Notification } from "@vaadin/react-components/Notification";
+import { Button, Dialog } from "@vaadin/react-components";
+import { useSignal } from "@vaadin/hilla-react-signals";
 
 export const config: ViewConfig = {
     loginRequired: true
 };
 
 export default function CalendarView() {
+    const isDialogOpen = useSignal(false);
     const [selectedDate, setSelectedDate] = useState<Date>(new Date());
     const [calendarByDay, setCalendarByDay] = useState<Map<Date, CalendarEntryRecord>>(
         new Map<Date, CalendarEntryRecord>()
     );
 
-    const [isAddingEntry, setAddingEntry] = useState<boolean>(false);
     const [isLoading, setLoading] = useState<boolean>(false);
 
     let spinnerTimeout: number;
@@ -43,7 +45,7 @@ export default function CalendarView() {
 
         if (saved) {
             setCalendarByDay((calendarMap) => calendarMap.set(new Date(saved.date), saved));
-            setAddingEntry(false);
+            isDialogOpen.value = false;
             const notification = Notification.show("Entry was saved successfully.", {
                 position: "top-center",
                 duration: 3000,
@@ -84,11 +86,42 @@ export default function CalendarView() {
                 </div>
             )}
 
-            <button onClick={(e) => setAddingEntry(true)} type="button">
-                Add entry
-            </button>
+            <div className="flex justify-start my-4">
+                <Button onClick={(e) => (isDialogOpen.value = true)} theme="primary">
+                    Add entry
+                </Button>
+            </div>
 
-            {isAddingEntry && <NewEntry onSubmit={onCalendarEntrySaved} />}
+            <Dialog
+                headerTitle="Edit calendar entry"
+                opened={isDialogOpen.value}
+                onOpenedChanged={({ detail }) => {
+                    isDialogOpen.value = detail.value;
+                }}
+                footerRenderer={() => (
+                    <>
+                        <Button
+                            onClick={() => {
+                                isDialogOpen.value = false;
+                            }}
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            theme="primary"
+                            onClick={() => {
+                                isDialogOpen.value = false;
+                            }}
+                        >
+                            Add
+                        </Button>
+                    </>
+                )}
+            >
+                <div className="w-[400px]">
+                    <NewEntry onSubmit={onCalendarEntrySaved} opened={isDialogOpen.value} />
+                </div>
+            </Dialog>
         </div>
     );
 }

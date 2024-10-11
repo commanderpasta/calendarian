@@ -26,9 +26,10 @@ export default function TrendChart(props: TrendChartProps) {
                         max: dayjs().toDate()
                     }}
                     lineWidth={3}
-                    margin={{ top: 50, right: 80, bottom: 50, left: 80 }}
+                    margin={{ top: 20, right: 80, bottom: 30, left: 80 }}
                     curve="monotoneX"
                     colors="#00a2ae"
+                    pointSize={10}
                 />
             </Suspense>
         </div>
