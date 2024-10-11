@@ -48,7 +48,7 @@ public class DashboardService {
         String username = VaadinRequest.getCurrent().getUserPrincipal().getName();
         User user = userRepository.findByUsername(username);
 
-        List<CalendarEntry> recentEntries = calendarRepository.findByUserAndDateBetweenOrderByDate(user, LocalDate.now().minusDays(90), LocalDate.now());
+        List<CalendarEntry> recentEntries = calendarRepository.findByUserAndDateBetweenOrderByDate(user, LocalDate.now().minusDays(30), LocalDate.now());
 
         return recentEntries.stream()
             .map(this::toTrendRecord)

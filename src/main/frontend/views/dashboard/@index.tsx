@@ -2,10 +2,11 @@ import { ViewConfig } from "@vaadin/hilla-file-router/types.js";
 import TrendRecord from "Frontend/generated/com/ianmatos/calendarian/services/DashboardService/TrendRecord";
 import { DashboardService } from "Frontend/generated/endpoints";
 import { useEffect, useMemo, useState } from "react";
-import TrendChart from "Frontend/components/TrendChart";
+import MoodChart from "Frontend/components/MoodChart";
 import dayjs from "dayjs";
 import Mood from "Frontend/generated/com/ianmatos/calendarian/data/calendar/CalendarEntry/Mood";
 import { Datum, Serie } from "@nivo/line";
+import HoursChart from "Frontend/components/HoursChart";
 
 export const config: ViewConfig = {
     loginRequired: true,
@@ -50,22 +51,41 @@ export default function Dashboard() {
             };
         });
 
-        const result = [
+        return [
             {
                 id: "xd",
                 color: "#00a2ae",
                 data: linePoints
             }
         ];
+    }, [trend]);
 
-        console.debug(result);
-        return result;
+    const sleepChartData = useMemo((): Serie[] => {
+        if (!trend) {
+            return [];
+        }
+
+        const linePoints: Datum[] = trend.map((dataPoint) => {
+            return {
+                x: dayjs(dataPoint.date).toDate(),
+                y: dataPoint.sleep
+            };
+        });
+
+        return [
+            {
+                id: "xd2",
+                color: "orange",
+                data: linePoints
+            }
+        ];
     }, [trend]);
 
     return (
         <main className="m-4 h-full">
-            <h2 className="text-2xl">Your 90 day trend.</h2>
-            {moodChartData ? <TrendChart data={moodChartData} /> : <></>}
+            <h2 className="text-2xl">Your 30 day trend.</h2>
+            {moodChartData?.length > 0 ? <MoodChart data={moodChartData} /> : <></>}
+            {sleepChartData?.length > 0 ? <HoursChart data={sleepChartData} /> : <></>}
         </main>
     );
 }
