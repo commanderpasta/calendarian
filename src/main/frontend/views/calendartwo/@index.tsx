@@ -15,7 +15,7 @@ export const config: ViewConfig = {
 
 const selectedCalendarEntry = signal<CalendarEntryRecord | null>(null);
 
-export default function CalendarTwoView() {
+export default function YourCalendar() {
     const isDialogOpen = useSignal(false);
     const [isLoading, setLoading] = useState<boolean>(true);
     const [calendarEntries, setCalendarEntries] = useState<CalendarEntryRecord[]>([]); // did not work with useSignal

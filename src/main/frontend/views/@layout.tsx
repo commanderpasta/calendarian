@@ -84,9 +84,11 @@ export default function MainLayout() {
                     <nav className="flex flex-col gap-2">
                         <NavLink
                             to="/"
-                            className="text-[var(--lumo-primary-contrast-color)] bg-[var(--lumo-primary-text-color)] rounded-xl mt-2 mx-2"
+                            className="text-[var(--lumo-primary-contrast-color)] !no-underline bg-[var(--lumo-primary-text-color)] rounded-xl mt-2 mx-2"
                         >
-                            <img src={logo} />
+                            <div className="lg:text-4xl text-center py-5 md:text-5xl text-5xl text-white drop-shadow-lg font-semibold">
+                                Calendarian
+                            </div>
                         </NavLink>
 
                         {createMenuItems().map(({ to, icon, title }) => (
