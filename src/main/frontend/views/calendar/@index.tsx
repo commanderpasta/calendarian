@@ -38,6 +38,8 @@ export default function CalendarView() {
         });
     }, []);
 
+    useEffect(() => {}, [calendarByDay.value]); // workaround: this fixes the table not rendering on initial page load after login
+
     async function onCalendarEntrySaved(calendarEntry: CalendarEntryRecord) {
         const saved = await CalendarService.save(calendarEntry);
 
@@ -58,9 +60,9 @@ export default function CalendarView() {
     }
 
     function deleteEntry(key: string) {
-        const xd = new Map(calendarByDay.value);
-        xd.delete(key);
-        calendarByDay.value = xd;
+        const calendarCopy = new Map(calendarByDay.value);
+        calendarCopy.delete(key);
+        calendarByDay.value = calendarCopy;
     }
 
     function editEntry(key: string) {
