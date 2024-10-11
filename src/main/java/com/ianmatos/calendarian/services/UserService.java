@@ -63,15 +63,4 @@ public class UserService {
 
         return new UserInfoRecord(auth.getName(), authorities);
     }
-
-    @PermitAll
-    @Nonnull
-    public List<String> getRoles() {
-        Authentication auth = SecurityContextHolder.getContext()
-                .getAuthentication();
-
-        return = auth.getAuthorities().stream()
-            .map(GrantedAuthority::getAuthority)
-            .collect(Collectors.toList());
-    }
 }
