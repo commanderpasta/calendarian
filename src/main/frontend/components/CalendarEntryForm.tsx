@@ -13,6 +13,7 @@ import { _validators } from "@vaadin/hilla-lit-form";
 import { IntegerField, TextArea } from "@vaadin/react-components";
 import { useSignal } from "@vaadin/hilla-react-signals";
 import { getRandomHelperText } from "Frontend/util/helper-text-gen";
+import { prettyPrintMood } from "Frontend/util/mood-text";
 
 export const config: ViewConfig = {
     loginRequired: true,
@@ -26,14 +27,6 @@ interface CalendarEntryFormProps {
     calendarEntry?: CalendarEntryRecord | null;
     onSubmit?: (contact: CalendarEntryRecord) => Promise<void>;
 }
-
-const prettyPrintMood = {
-    [Mood.VERYPOSITIVE]: "Very positive 🚀",
-    [Mood.POSITIVE]: "Positive",
-    [Mood.NEUTRAL]: "Neutral",
-    [Mood.NEGATIVE]: "Negative",
-    [Mood.VERYNEGATIVE]: "Very negative 😔"
-};
 
 export default function CalendarEntryForm({ calendarEntry, onSubmit, opened }: CalendarEntryFormProps) {
     const helperText = useSignal(getRandomHelperText());
@@ -64,7 +57,7 @@ export default function CalendarEntryForm({ calendarEntry, onSubmit, opened }: C
                 };
             })
         );
-    }, []);
+    }, [calendarEntry]);
 
     useEffect(() => {
         if (opened) {
@@ -74,7 +67,7 @@ export default function CalendarEntryForm({ calendarEntry, onSubmit, opened }: C
 
     return (
         <div className="flex flex-col gap-s items-start w-full">
-            <DatePicker max={dayjs().toISOString()} label="Date" required {...field(model.date)} />
+            <DatePicker max={dayjs().format("YYYY-MM-DD")} label="Date" required {...field(model.date)} />
             <Select label="Mood" required items={moods} {...field(model.mood)} />
             <IntegerField
                 label="Sleep duration"

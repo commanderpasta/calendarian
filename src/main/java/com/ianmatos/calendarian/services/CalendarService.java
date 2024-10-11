@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.lang.NonNull;
+
 import com.ianmatos.calendarian.data.calendar.CalendarEntry;
 import com.ianmatos.calendarian.data.calendar.CalendarEntryRepository;
 import com.ianmatos.calendarian.data.user.User;
@@ -37,6 +39,7 @@ public class CalendarService {
             LocalDate date,
 
             @NotNull
+            @NonNull
             CalendarEntry.Mood mood,
 
             @Nullable

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import CalendarEntryForm from "../../components/CalendarEntryForm";
 import CalendarEntryRecord from "Frontend/generated/com/ianmatos/calendarian/services/CalendarService/CalendarEntryRecord";
 import { CalendarService } from "Frontend/generated/endpoints";
@@ -8,16 +8,18 @@ import { ViewConfig } from "@vaadin/hilla-file-router/types.js";
 import LoadingIndicator from "Frontend/components/LoadingIndicator";
 import { Notification } from "@vaadin/react-components/Notification";
 import { Button, Dialog } from "@vaadin/react-components";
-import { useSignal } from "@vaadin/hilla-react-signals";
+import { signal, useSignal } from "@vaadin/hilla-react-signals";
 
 export const config: ViewConfig = {
     loginRequired: true
 };
 
+// Reactivity with Map only appears to work outside of the function component
+const calendarByDay = signal(new Map<string, CalendarEntryRecord>());
+const selectedCalendarEntry = signal<CalendarEntryRecord | null>(null);
+
 export default function CalendarView() {
     const isDialogOpen = useSignal(false);
-    const selectedCalendarEntry = useSignal<CalendarEntryRecord | null>(null);
-    const calendarByDay = useSignal(new Map<string, CalendarEntryRecord>());
 
     const [isLoading, setLoading] = useState<boolean>(false);
 
@@ -26,15 +28,15 @@ export default function CalendarView() {
         spinnerTimeout = setTimeout(() => {
             setLoading(true);
         }, 150);
-        (CalendarService.findMyCalendar() as Promise<CalendarEntryRecord[]>).then(initCalendar);
+        (CalendarService.findMyCalendar() as Promise<CalendarEntryRecord[]>).then((entries) => {
+            for (const entry of entries) {
+                calendarByDay.value.set(entry.date, entry);
+            }
+
+            clearTimeout(spinnerTimeout);
+            setLoading(false);
+        });
     }, []);
-
-    function initCalendar(entries: CalendarEntryRecord[]): void {
-        entries.map((entry) => calendarByDay.value.set(entry.date, entry));
-
-        clearTimeout(spinnerTimeout);
-        setLoading(false);
-    }
 
     async function onCalendarEntrySaved(calendarEntry: CalendarEntryRecord) {
         const saved = await CalendarService.save(calendarEntry);
@@ -56,7 +58,9 @@ export default function CalendarView() {
     }
 
     function deleteEntry(key: string) {
-        calendarByDay.value.delete(key);
+        const xd = new Map(calendarByDay.value);
+        xd.delete(key);
+        calendarByDay.value = xd;
     }
 
     function editEntry(key: string) {

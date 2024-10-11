@@ -11,6 +11,8 @@ import jakarta.validation.constraints.PositiveOrZero;
 
 import java.time.LocalDate;
 
+import org.springframework.lang.NonNull;
+
 import com.ianmatos.calendarian.data.AbstractEntity;
 import com.ianmatos.calendarian.data.user.User;
 import com.vaadin.hilla.Nullable;
