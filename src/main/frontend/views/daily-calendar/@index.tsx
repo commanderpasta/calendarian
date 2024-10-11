@@ -1,4 +1,4 @@
-import { Suspense, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import CalendarEntryForm from "../../components/CalendarEntryForm";
 import CalendarEntryRecord from "Frontend/generated/com/ianmatos/calendarian/services/CalendarService/CalendarEntryRecord";
 import { CalendarService } from "Frontend/generated/endpoints";
@@ -8,7 +8,6 @@ import { Notification } from "@vaadin/react-components/Notification";
 import { Button } from "@vaadin/react-components";
 import { computed } from "@vaadin/hilla-react-signals";
 import { EndpointError } from "@vaadin/hilla-frontend";
-import LoadingIndicator from "Frontend/components/LoadingIndicator";
 
 export const config: ViewConfig = {
     loginRequired: true
@@ -90,12 +89,14 @@ export default function DailyCalendar() {
                     </Button>
                 ))}
             </header>
-            <div className="m-4 flex !justify-center w-full [&_>_div]:!max-w-96">
-                <CalendarEntryForm
-                    selectedDate={selectedDate}
-                    calendarEntry={calendarEntry}
-                    onSubmit={onCalendarEntrySaved}
-                />
+            <div className="p-4 flex !justify-center w-full">
+                <div className="bg-gray-50 border-2 rounded-2xl !p-4 [&_>_*]:!w-96">
+                    <CalendarEntryForm
+                        selectedDate={selectedDate}
+                        calendarEntry={calendarEntry}
+                        onSubmit={onCalendarEntrySaved}
+                    />
+                </div>
             </div>
         </main>
     );
