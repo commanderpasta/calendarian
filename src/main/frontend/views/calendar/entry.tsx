@@ -42,7 +42,7 @@ export default function CalendarEntryForm({ calendarEntry, onSubmit }: CalendarE
         if (calendarEntry) {
             read(calendarEntry);
         } else {
-            reset();
+            reset(); // use default values for new entry
         }
 
         setMoods(
@@ -74,7 +74,6 @@ export default function CalendarEntryForm({ calendarEntry, onSubmit }: CalendarE
                 <Button onClick={submit} disabled={!dirty} theme="primary">
                     Save
                 </Button>
-                <Button onClick={reset}>Reset</Button>
             </div>
         </div>
     );
