@@ -17,7 +17,7 @@ export const config: ViewConfig = {
 
 const selectedCalendarEntry = signal<CalendarEntryRecord | null>(null);
 
-export default function CalendarView() {
+export default function HistoryView() {
     const isDialogOpen = useSignal(false);
     const [isLoading, setLoading] = useState<boolean>(true);
     const [calendarEntries, setCalendarEntries] = useState<CalendarEntryRecord[]>([]); // did not work with useSignal

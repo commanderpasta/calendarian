@@ -14,7 +14,7 @@ export const config: ViewConfig = {
     loginRequired: true
 };
 
-export default function YourCalendar() {
+export default function DailyCalendar() {
     const [calendarEntry, setCalendarEntry] = useState<CalendarEntryRecord>();
     const [selectedDate, setSelectedDate] = useState<dayjs.Dayjs>(dayjs());
 

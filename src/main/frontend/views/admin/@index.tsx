@@ -7,7 +7,10 @@ import { Grid, GridColumn } from "@vaadin/react-components";
 
 export const config: ViewConfig = {
     loginRequired: true,
-    rolesAllowed: ["ROLE_ADMIN"]
+    rolesAllowed: ["ROLE_ADMIN"],
+    menu: {
+        order: 0
+    }
 };
 
 export default function Admin() {
