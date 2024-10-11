@@ -6,7 +6,7 @@ This is a simple application written using the [Hilla](https://hilla.dev) framew
 
 The local environment runs on two docker containers, one for Hilla (Frontend+Backend) and one for MySQL, and can be started with `docker-compose up`.
 
-A production environment has not been built. The environment variables are pre-configured (or rather hardcoded), and the initial databases for authentication are set up automatically, using JPA and a JdbcUserDetailsManager in `SecurityConfig.java`.
+A production environment has not been set up. The environment variables are pre-configured (or rather hardcoded), and the initial databases for authentication are set up automatically, using JPA and a JdbcUserDetailsManager in `SecurityConfig.java`.
 
 ## Retrospective
 
