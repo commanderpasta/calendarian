@@ -26,21 +26,19 @@ export default function MainLayout() {
                             <>
                                 <div className="flex items-center gap-x-2">
                                     <span>{`Welcome, ${state.user.name}.`}</span>
-                                    <Button
-                                        onClick={() => navigate("/dashboard")}
-                                        className="!bg-teal-200 !text-black"
-                                        theme="primary"
-                                    >
+                                    <Button onClick={() => navigate("/dashboard")} theme="primary">
                                         Go to app
                                     </Button>
-                                    <Button onClick={logout} className="!bg-teal-200 !text-black" theme="primary">
+                                    <Button onClick={logout} theme="primary">
                                         Sign out
                                     </Button>
                                 </div>
                             </>
                         ) : (
                             <a href="/auth">
-                                <Button className="w-full text-teal-200">Sign in</Button>
+                                <Button className="w-full" theme="primary">
+                                    Sign in
+                                </Button>
                             </a>
                         )}
                     </span>
@@ -66,14 +64,16 @@ export default function MainLayout() {
                             <div className="flex items-center gap-x-2">
                                 <span>{`Welcome, ${state.user.name}.`}</span>
                                 <span>{`Auth: ${state.user.authorities?.toString()}.`}</span>
-                                <Button onClick={logout} className="!bg-teal-200 !text-black" theme="primary">
+                                <Button onClick={logout} theme="primary">
                                     Sign out
                                 </Button>
                             </div>
                         </>
                     ) : (
                         <a href="/auth">
-                            <Button className="w-full text-teal-200">Sign in</Button>
+                            <Button className="w-full" theme="primary">
+                                Sign in
+                            </Button>
                         </a>
                     )}
                 </span>
@@ -82,7 +82,10 @@ export default function MainLayout() {
             <div slot="drawer">
                 <header>
                     <nav className="flex flex-col gap-2">
-                        <NavLink to="/" className="bg-teal-200 hover:bg-teal-300 rounded-xl mt-2 mx-2">
+                        <NavLink
+                            to="/"
+                            className="text-[var(--lumo-primary-contrast-color)] bg-[var(--lumo-primary-text-color)] rounded-xl mt-2 mx-2"
+                        >
                             <img src={logo} />
                         </NavLink>
 

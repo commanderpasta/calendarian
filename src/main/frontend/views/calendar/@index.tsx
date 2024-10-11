@@ -122,6 +122,12 @@ export default function CalendarView() {
                         </tbody>
                     </table>
 
+                    {sortedEntries?.length === 0 && (
+                        <div className="w-full flex justify-center">
+                            <span>Nothing here yet.</span>
+                        </div>
+                    )}
+
                     <div className="flex justify-start my-4">
                         <Button onClick={() => openEditingModal()} theme="primary">
                             Add entry

@@ -131,7 +131,7 @@ export default function Auth() {
                     </>
                 )}
             </main>
-            <div className="bg-purple-400 h-full" />
+            <div className="bg-[var(--lumo-primary-color)] h-full" />
         </div>
     );
 }
