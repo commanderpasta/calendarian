@@ -7,15 +7,22 @@ import dayjs from "dayjs";
 
 interface CalendarElementProps {
     calendarEntry: CalendarEntryRecord;
-    onDelete?: () => void;
+    onDeleted?: () => void;
+    onEdit?: () => void;
 }
 
 export default function CalendarElement(props: CalendarElementProps) {
+    function editEntry() {
+        if (props.onEdit) {
+            props.onEdit();
+        }
+    }
+
     async function deleteEntry() {
         try {
             await CalendarService.deleteById(props.calendarEntry.id);
-            if (props.onDelete) {
-                props.onDelete();
+            if (props.onDeleted) {
+                props.onDeleted();
             }
         } catch (e) {
             if (e instanceof EndpointError) {
@@ -35,7 +42,7 @@ export default function CalendarElement(props: CalendarElementProps) {
             <td>{props.calendarEntry.hoursOfSleep}</td>
             <td>{props.calendarEntry.note}</td>
             <td className="flex gap-2">
-                <Button theme="icon">
+                <Button theme="icon" onClick={editEntry}>
                     <Icon icon="vaadin:edit" />
                 </Button>
                 <Button theme="icon" onClick={deleteEntry}>

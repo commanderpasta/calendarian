@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import NewEntry from "../../components/CalendarEntryForm";
+import CalendarEntryForm from "../../components/CalendarEntryForm";
 import CalendarEntryRecord from "Frontend/generated/com/ianmatos/calendarian/services/CalendarService/CalendarEntryRecord";
 import { CalendarService } from "Frontend/generated/endpoints";
 import dayjs from "dayjs";
@@ -16,10 +16,8 @@ export const config: ViewConfig = {
 
 export default function CalendarView() {
     const isDialogOpen = useSignal(false);
-    const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-    const [calendarByDay, setCalendarByDay] = useState<Map<Date, CalendarEntryRecord>>(
-        new Map<Date, CalendarEntryRecord>()
-    );
+    const selectedCalendarEntry = useSignal<CalendarEntryRecord | null>(null);
+    const calendarByDay = useSignal(new Map<string, CalendarEntryRecord>());
 
     const [isLoading, setLoading] = useState<boolean>(false);
 
@@ -32,10 +30,8 @@ export default function CalendarView() {
     }, []);
 
     function initCalendar(entries: CalendarEntryRecord[]): void {
-        const calendarMap = new Map<Date, CalendarEntryRecord>();
-        entries.map((entry) => calendarMap.set(dayjs(entry.date).toDate(), entry));
+        entries.map((entry) => calendarByDay.value.set(entry.date, entry));
 
-        setCalendarByDay(calendarMap);
         clearTimeout(spinnerTimeout);
         setLoading(false);
     }
@@ -44,9 +40,14 @@ export default function CalendarView() {
         const saved = await CalendarService.save(calendarEntry);
 
         if (saved) {
-            setCalendarByDay((calendarMap) => calendarMap.set(new Date(saved.date), saved));
+            if (selectedCalendarEntry.value) {
+                deleteEntry(saved.date);
+            }
+
+            calendarByDay.value.set(saved.date, saved);
             isDialogOpen.value = false;
-            const notification = Notification.show("Entry was saved successfully.", {
+            selectedCalendarEntry.value = null;
+            Notification.show("Entry was saved successfully.", {
                 position: "top-center",
                 duration: 3000,
                 theme: "success"
@@ -54,10 +55,16 @@ export default function CalendarView() {
         }
     }
 
-    function deleteEntry(key: Date) {
-        const updatedMap = new Map(calendarByDay);
-        updatedMap.delete(key);
-        setCalendarByDay(updatedMap);
+    function deleteEntry(key: string) {
+        calendarByDay.value.delete(key);
+    }
+
+    function editEntry(key: string) {
+        const entry = calendarByDay.value.get(key);
+        if (entry) {
+            selectedCalendarEntry.value = entry;
+            isDialogOpen.value = true;
+        }
     }
 
     return (
@@ -74,9 +81,16 @@ export default function CalendarView() {
                     </tr>
                 </thead>
                 <tbody>
-                    {Array.from(calendarByDay.entries()).map(([key, value]) => (
-                        <CalendarElement key={key.toString()} calendarEntry={value} onDelete={() => deleteEntry(key)} />
-                    ))}
+                    {Array.from(calendarByDay.value.entries())
+                        .sort((a, b) => dayjs(a[0]).unix() - dayjs(b[0]).unix())
+                        .map(([key, value]) => (
+                            <CalendarElement
+                                key={key.toString()}
+                                calendarEntry={value}
+                                onEdit={() => editEntry(key)}
+                                onDeleted={() => deleteEntry(key)}
+                            />
+                        ))}
                 </tbody>
             </table>
 
@@ -98,11 +112,12 @@ export default function CalendarView() {
                 onOpenedChanged={({ detail }) => {
                     isDialogOpen.value = detail.value;
                 }}
-                footerRenderer={() => (
+                /*footerRenderer={() => (
                     <>
                         <Button
                             onClick={() => {
                                 isDialogOpen.value = false;
+                                selectedCalendarEntry.value = null;
                             }}
                         >
                             Cancel
@@ -111,15 +126,20 @@ export default function CalendarView() {
                             theme="primary"
                             onClick={() => {
                                 isDialogOpen.value = false;
+                                selectedCalendarEntry.value = null;
                             }}
                         >
                             Add
                         </Button>
                     </>
-                )}
+                )}*/
             >
                 <div className="w-[400px]">
-                    <NewEntry onSubmit={onCalendarEntrySaved} opened={isDialogOpen.value} />
+                    <CalendarEntryForm
+                        onSubmit={onCalendarEntrySaved}
+                        opened={isDialogOpen.value}
+                        calendarEntry={selectedCalendarEntry.value}
+                    />
                 </div>
             </Dialog>
         </div>

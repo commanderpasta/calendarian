@@ -44,12 +44,6 @@ export default function CalendarEntryForm({ calendarEntry, onSubmit, opened }: C
     });
 
     useEffect(() => {
-        if (opened) {
-            helperText.value = getRandomHelperText();
-        }
-    }, [opened]);
-
-    useEffect(() => {
         setDefaultValue({
             date: dayjs().format("YYYY-MM-DD"),
             mood: Mood.VERYPOSITIVE,
@@ -71,6 +65,12 @@ export default function CalendarEntryForm({ calendarEntry, onSubmit, opened }: C
             })
         );
     }, []);
+
+    useEffect(() => {
+        if (opened) {
+            helperText.value = getRandomHelperText();
+        }
+    }, [opened]);
 
     return (
         <div className="flex flex-col gap-s items-start w-full">

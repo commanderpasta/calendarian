@@ -28,6 +28,7 @@ export default function MainLayout() {
                         <>
                             <div className="flex items-center gap-x-2">
                                 <span>{`Welcome, ${state.user.name}.`}</span>
+                                <span>{`Auth: ${state.user.authorities?.toString()}.`}</span>
                                 <Button onClick={logout} className="!bg-teal-200 !text-black" theme="primary">
                                     Sign out
                                 </Button>
