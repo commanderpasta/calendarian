@@ -4,7 +4,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.PositiveOrZero;
 
@@ -15,6 +16,7 @@ import com.ianmatos.calendarian.data.user.User;
 import com.vaadin.hilla.Nullable;
 import com.vaadin.hilla.Nonnull;
 @Entity
+@Table(uniqueConstraints = { @UniqueConstraint(name = "UniqueUserAndDay", columnNames = {"date", "username"}) })
 public class CalendarEntry extends AbstractEntity {
     public enum Mood {
         VERYPOSITIVE,

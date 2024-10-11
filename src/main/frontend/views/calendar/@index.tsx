@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import NewEntry from "./NewEntry";
+import NewEntry from "./entry";
 import CalendarEntryRecord from "Frontend/generated/com/ianmatos/calendarian/services/CalendarService/CalendarEntryRecord";
 import { CalendarService } from "Frontend/generated/endpoints";
 import dayjs from "dayjs";
@@ -52,6 +52,12 @@ export default function CalendarView() {
         }
     }
 
+    function deleteEntry(key: Date) {
+        const updatedMap = new Map(calendarByDay);
+        updatedMap.delete(key);
+        setCalendarByDay(updatedMap);
+    }
+
     return (
         <div className="m-4">
             <h2 className="text-xl font-bold">Calendar</h2>
@@ -62,11 +68,12 @@ export default function CalendarView() {
                         <th>Mood</th>
                         <th>Sleep (h)</th>
                         <th>Note</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     {Array.from(calendarByDay.entries()).map(([key, value]) => (
-                        <CalendarElement key={key.toString()} calendarEntry={value} />
+                        <CalendarElement key={key.toString()} calendarEntry={value} onDelete={() => deleteEntry(key)} />
                     ))}
                 </tbody>
             </table>

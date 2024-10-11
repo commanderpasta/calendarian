@@ -8,10 +8,10 @@ import CalendarEntryRecordModel from "Frontend/generated/com/ianmatos/calendaria
 import CalendarEntryRecord from "Frontend/generated/com/ianmatos/calendarian/services/CalendarService/CalendarEntryRecord";
 import Mood from "Frontend/generated/com/ianmatos/calendarian/data/calendar/CalendarEntry/Mood";
 import { DatePicker } from "@vaadin/react-components/DatePicker.js";
-import { NumberField } from "@vaadin/react-components/NumberField.js";
 import { ViewConfig } from "@vaadin/hilla-file-router/types.js";
 import dayjs from "dayjs";
 import { _validators } from "@vaadin/hilla-lit-form";
+import { IntegerField } from "@vaadin/react-components";
 
 export const config: ViewConfig = {
     loginRequired: true,
@@ -28,16 +28,21 @@ interface CalendarEntryFormProps {
 export default function CalendarEntryForm({ calendarEntry, onSubmit }: CalendarEntryFormProps) {
     const [moods, setMoods] = useState<SelectItem[]>([]);
 
-    const { field, model, submit, reset, read, dirty, update } = useForm(CalendarEntryRecordModel, { onSubmit });
-    const { setValue } = useFormPart(model.date);
+    const { field, model, submit, reset, read, dirty, setDefaultValue } = useForm(CalendarEntryRecordModel, {
+        onSubmit
+    });
 
     useEffect(() => {
+        setDefaultValue({
+            date: dayjs().toISOString(),
+            mood: Mood.VERYPOSITIVE,
+            hoursOfSleep: 8
+        });
+
         if (calendarEntry) {
             read(calendarEntry);
-        } else {
-            setValue(dayjs().toISOString());
         }
-        update();
+
         setMoods(
             Object.values(Mood).map((mood) => {
                 return {
@@ -46,15 +51,22 @@ export default function CalendarEntryForm({ calendarEntry, onSubmit }: CalendarE
                 };
             })
         );
-
-        console.log("Form state", model);
     }, []);
 
     return (
         <div className="flex flex-col gap-s items-start">
             <DatePicker max={dayjs().toISOString()} label="Date" required {...field(model.date)} />
             <Select label="Mood" required items={moods} {...field(model.mood)} />
-            <NumberField label="Sleep (in h)" {...field(model.hoursOfSleep)} />
+            <IntegerField
+                label="Sleep duration"
+                stepButtonsVisible
+                min={0}
+                max={48}
+                className="[&_:is(vaadin-input-container)]:max-w-24 "
+                {...field(model.hoursOfSleep)}
+            >
+                <div slot="suffix">h</div>
+            </IntegerField>
             <TextField label="Notes" {...field(model.note)} />
             <div className="flex gap-m">
                 <Button onClick={submit} disabled={!dirty} theme="primary">

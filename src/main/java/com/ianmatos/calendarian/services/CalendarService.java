@@ -2,6 +2,7 @@ package com.ianmatos.calendarian.services;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import com.ianmatos.calendarian.data.calendar.CalendarEntry;
 import com.ianmatos.calendarian.data.calendar.CalendarEntryRepository;
@@ -11,6 +12,7 @@ import com.vaadin.flow.server.VaadinRequest;
 import com.vaadin.hilla.Endpoint;
 import com.vaadin.hilla.Nonnull;
 import com.vaadin.hilla.Nullable;
+import com.vaadin.hilla.exception.EndpointException;
 
 import jakarta.annotation.security.PermitAll;
 import jakarta.validation.constraints.NotNull;
@@ -64,26 +66,51 @@ public class CalendarService {
         return userCalendar.stream()
                 .map(this::toCalendarEntryRecord).toList();
     }
+    
+    public void deleteById(Long calendarEntryId) throws EndpointException {
+        String username = VaadinRequest.getCurrent().getUserPrincipal().getName();
+        User user = userRepository.findByUsername(username);
+        CalendarEntry dbCalendarEntry; 
 
-    public CalendarEntryRecord save(CalendarEntryRecord calendarEntry) {
+        try {
+            dbCalendarEntry = calendarRepository.findById(calendarEntryId).orElseThrow();
+        } catch (Exception e) {
+            throw new EndpointException("Entry not found.");
+        }
+
+        if (dbCalendarEntry.getUser() != user) {
+            throw new EndpointException("Entry not found."); // prevent enumeration
+        }
+
+        calendarRepository.deleteById(calendarEntryId);
+    }
+
+    public CalendarEntryRecord save(CalendarEntryRecord calendarEntry) throws EndpointException {
         String username = VaadinRequest.getCurrent().getUserPrincipal().getName();
         User user = userRepository.findByUsername(username);
 
-        CalendarEntry dbCalendarEntry;
+        CalendarEntry updatedCalendarEntry;
 
         if (calendarEntry.id == null) {
-            dbCalendarEntry = new CalendarEntry();
+            // create new element
+            updatedCalendarEntry = new CalendarEntry();
+
+            Optional<CalendarEntry> existingEntry = calendarRepository.findByUserAndDate(user, calendarEntry.date);
+            if (existingEntry.isPresent()) {
+                throw new EndpointException("An entry for the current day already exists.");
+            }
         } else {
-            dbCalendarEntry = calendarRepository.findById(calendarEntry.id).orElseThrow();
+            // update existing
+            updatedCalendarEntry = calendarRepository.findById(calendarEntry.id).orElseThrow();
         }
 
-        dbCalendarEntry.setDate(calendarEntry.date);
-        dbCalendarEntry.setMood(calendarEntry.mood);
-        dbCalendarEntry.setHoursOfSleep(calendarEntry.hoursOfSleep);
-        dbCalendarEntry.setNote(calendarEntry.note);
-        dbCalendarEntry.setUser(user);
+        updatedCalendarEntry.setDate(calendarEntry.date);
+        updatedCalendarEntry.setMood(calendarEntry.mood);
+        updatedCalendarEntry.setHoursOfSleep(calendarEntry.hoursOfSleep);
+        updatedCalendarEntry.setNote(calendarEntry.note);
+        updatedCalendarEntry.setUser(user);
 
-        var saved = calendarRepository.save(dbCalendarEntry);
+        var saved = calendarRepository.save(updatedCalendarEntry);
 
         return toCalendarEntryRecord(saved);
     }
