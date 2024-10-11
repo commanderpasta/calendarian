@@ -2,7 +2,7 @@ import { ViewConfig } from "@vaadin/hilla-file-router/types.js";
 
 export const config: ViewConfig = {
     loginRequired: true,
-    rolesAllowed: ["ADMIN"]
+    rolesAllowed: ["ROLE_ADMIN"]
 };
 
 export default function Admin() {

@@ -30,8 +30,10 @@ public class UserService {
     }
 
     public record UserInfoRecord(
+        @Nonnull
         String name,
-        List<String> authorities
+        @Nonnull
+        List<@Nonnull String> authorities
     ) {}
 
     @AnonymousAllowed
@@ -60,5 +62,16 @@ public class UserService {
                 .collect(Collectors.toList());
 
         return new UserInfoRecord(auth.getName(), authorities);
+    }
+
+    @PermitAll
+    @Nonnull
+    public List<String> getRoles() {
+        Authentication auth = SecurityContextHolder.getContext()
+                .getAuthentication();
+
+        return = auth.getAuthorities().stream()
+            .map(GrantedAuthority::getAuthority)
+            .collect(Collectors.toList());
     }
 }

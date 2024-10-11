@@ -1,7 +1,7 @@
 import { LoginForm, LoginI18n, LoginOverlayLoginEvent } from "@vaadin/react-components";
-import { Suspense, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "Frontend/auth";
+import { login, useAuth } from "Frontend/auth";
 import { ViewConfig } from "@vaadin/hilla-file-router/types.js";
 import { UserService } from "Frontend/generated/endpoints";
 import { EndpointError, EndpointValidationError } from "@vaadin/hilla-frontend";
@@ -31,7 +31,7 @@ const NavigateAndReload: React.FC<NavigateAndReloadProps> = ({ to }) => {
  * Login views in Hilla
  */
 export default function Auth() {
-    const { state, login } = useAuth();
+    const { state, logout } = useAuth();
     const [hasDefaultError, setError] = useState<boolean>();
     const [errorMessage, setErrorMessage] = useState<string>();
     const [url, setUrl] = useState<string>();
@@ -72,12 +72,11 @@ export default function Auth() {
     }, [isInRegisterMode, errorMessage]);
 
     const doLogin = async (username: string, password: string) => {
-        const { defaultUrl, error, redirectUrl } = await login(username, password);
+        const { error } = await login(username, password);
 
         if (error) {
             setError(true);
         } else {
-            //setUrl(redirectUrl ?? defaultUrl ?? '/');
             setUrl("/calendar");
         }
     };
