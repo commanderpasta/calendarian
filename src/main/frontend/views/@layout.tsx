@@ -3,7 +3,7 @@ import MenuButton from "Frontend/components/MenuButton";
 import logo from "Frontend/assets/images/logo.png";
 import { useRouteMetadata } from "Frontend/util/routing.js";
 import { Suspense, useEffect } from "react";
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../auth";
 import { createMenuItems } from "@vaadin/hilla-file-router/runtime.js";
 
@@ -14,6 +14,42 @@ export default function MainLayout() {
     }, [currentTitle]);
 
     const { state, logout } = useAuth();
+    const navigate = useNavigate();
+
+    if (useLocation().pathname === "/") {
+        return (
+            <AppLayout primarySection="navbar">
+                <div slot="navbar" className="flex justify-end w-full">
+                    <span className="mr-3">
+                        {state.user ? (
+                            <>
+                                <div className="flex items-center gap-x-2">
+                                    <span>{`Welcome, ${state.user.name}.`}</span>
+                                    <Button
+                                        onClick={() => navigate("/dashboard")}
+                                        className="!bg-teal-200 !text-black"
+                                        theme="primary"
+                                    >
+                                        Go to app
+                                    </Button>
+                                    <Button onClick={logout} className="!bg-teal-200 !text-black" theme="primary">
+                                        Sign out
+                                    </Button>
+                                </div>
+                            </>
+                        ) : (
+                            <a href="/auth">
+                                <Button className="w-full text-teal-200">Sign in</Button>
+                            </a>
+                        )}
+                    </span>
+                </div>
+                <Suspense>
+                    <Outlet />
+                </Suspense>
+            </AppLayout>
+        );
+    }
 
     return (
         <AppLayout primarySection="drawer">

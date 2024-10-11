@@ -7,7 +7,7 @@ export const config: ViewConfig = {
 /**
  * Publicly visible landing page.
  */
-export default function Public() {
+export default function LandingPage() {
     return (
         <div className="p-4">
             <p>Start page</p>

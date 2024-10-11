@@ -87,14 +87,14 @@ export default function CalendarView() {
                     </tr>
                 </thead>
                 <tbody>
-                    {Array.from(calendarByDay.value.entries())
-                        .sort((a, b) => dayjs(a[0]).unix() - dayjs(b[0]).unix())
-                        .map(([key, value]) => (
+                    {Array.from(calendarByDay.value.values())
+                        .sort((a, b) => dayjs(a.date).unix() - dayjs(b.date).unix())
+                        .map((entry) => (
                             <CalendarElement
-                                key={key.toString()}
-                                calendarEntry={value}
-                                onEdit={() => editEntry(key)}
-                                onDeleted={() => deleteEntry(key)}
+                                key={entry.date}
+                                calendarEntry={entry}
+                                onEdit={() => editEntry(entry.date)}
+                                onDeleted={() => deleteEntry(entry.date)}
                             />
                         ))}
                 </tbody>
