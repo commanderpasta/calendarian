@@ -61,13 +61,14 @@ export default function CalendarView() {
                     theme: "success"
                 });
             }
-        } catch (error) {
-            console.error("Error saving calendar entry:", error);
-            Notification.show("Failed to save entry. Please try again.", {
-                position: "top-center",
-                duration: 3000,
-                theme: "error"
-            });
+        } catch (e) {
+            if (e instanceof EndpointError) {
+                Notification.show("Failed to save entry. " + e.message, {
+                    position: "top-center",
+                    duration: 3000,
+                    theme: "error"
+                });
+            }
         }
     }
 

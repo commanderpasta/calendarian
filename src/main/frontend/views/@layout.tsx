@@ -1,4 +1,4 @@
-import { AppLayout, Button, DrawerToggle } from "@vaadin/react-components";
+import { AppLayout, Avatar, Button, DrawerToggle } from "@vaadin/react-components";
 import MenuButton from "Frontend/components/MenuButton";
 import logo from "Frontend/assets/images/logo.png";
 import { useRouteMetadata } from "Frontend/util/routing.js";
@@ -62,8 +62,8 @@ export default function MainLayout() {
                     {state.user ? (
                         <>
                             <div className="flex items-center gap-x-2">
-                                <span>{`Welcome, ${state.user.name}.`}</span>
-                                <span>{`Auth: ${state.user.authorities?.toString()}.`}</span>
+                                <span>{`Welcome, ${state.user?.name}.`}</span>
+                                <Avatar name={state.user?.name}></Avatar>
                                 <Button onClick={logout} theme="primary">
                                     Sign out
                                 </Button>

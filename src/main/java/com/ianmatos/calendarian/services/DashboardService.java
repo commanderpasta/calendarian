@@ -3,8 +3,6 @@ package com.ianmatos.calendarian.services;
 import java.time.LocalDate;
 import java.util.List;
 
-import org.springframework.lang.NonNullApi;
-
 import com.ianmatos.calendarian.data.calendar.CalendarEntry;
 import com.ianmatos.calendarian.data.calendar.CalendarEntryRepository;
 import com.ianmatos.calendarian.data.user.User;

@@ -14,3 +14,7 @@ html,
 vaadin-app-layout::part(navbar) {
     background-color: #f3f5f7;
 }
+
+vaadin-select-item:hover {
+    color: white;
+}
