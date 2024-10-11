@@ -31,12 +31,12 @@ const NavigateAndReload: React.FC<NavigateAndReloadProps> = ({ to }) => {
  * Login views in Hilla
  */
 export default function Auth() {
-    const { state, logout } = useAuth();
+    const { state } = useAuth();
     const [hasDefaultError, setError] = useState<boolean>();
     const [errorMessage, setErrorMessage] = useState<string>();
-    const [url, setUrl] = useState<string>();
     const [isInRegisterMode, setRegisterMode] = useState<boolean>();
 
+    // todo: use a .json for the entire i18n dictionary and write a useI18n to simplify logic
     const i18n = useMemo<LoginI18n>(() => {
         let text = {
             form: {
@@ -52,7 +52,7 @@ export default function Auth() {
                 username: "Username is required",
                 password: "Password is required"
             }
-            //additionalInformation: 'Jos tarvitset lisätietoja käyttäjälle.',
+            //additionalInformation: "",
         };
 
         if (isInRegisterMode) {
@@ -76,8 +76,6 @@ export default function Auth() {
 
         if (error) {
             setError(true);
-        } else {
-            setUrl("/calendar");
         }
     };
 
