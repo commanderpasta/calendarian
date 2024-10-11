@@ -61,7 +61,8 @@ public class CalendarService {
         );
     }
 
-    public List<CalendarEntryRecord> findMyCalendar() {
+    @Nonnull
+    public List<@Nonnull CalendarEntryRecord> findMyCalendar() {
         String username = VaadinRequest.getCurrent().getUserPrincipal().getName();
         User user = userRepository.findByUsername(username);
 
