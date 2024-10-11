@@ -3,7 +3,6 @@ import CalendarEntryForm from "../../components/CalendarEntryForm";
 import CalendarEntryRecord from "Frontend/generated/com/ianmatos/calendarian/services/CalendarService/CalendarEntryRecord";
 import { CalendarService } from "Frontend/generated/endpoints";
 import dayjs from "dayjs";
-import CalendarElement from "../../components/TableCalendarElement";
 import { ViewConfig } from "@vaadin/hilla-file-router/types.js";
 import LoadingIndicator from "Frontend/components/LoadingIndicator";
 import { Notification } from "@vaadin/react-components/Notification";
