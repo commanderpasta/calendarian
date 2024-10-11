@@ -21,7 +21,7 @@ export default function CalendarView() {
     const [isAddingEntry, setAddingEntry] = useState<boolean>(false);
     const [isLoading, setLoading] = useState<boolean>(false);
 
-    let spinnerTimeout: NodeJS.Timeout;
+    let spinnerTimeout: number;
     useEffect(() => {
         spinnerTimeout = setTimeout(() => {
             setLoading(true);

@@ -3,6 +3,8 @@
   "license": "UNLICENSED",
   "type": "module",
   "dependencies": {
+    "@nivo/core": "0.87.0",
+    "@nivo/line": "0.87.0",
     "@polymer/polymer": "3.5.1",
     "@vaadin/bundles": "24.5.0-rc1",
     "@vaadin/common-frontend": "0.0.19",
@@ -98,7 +100,9 @@
     "proj4": "$proj4",
     "@vaadin/vaadin-themable-mixin": "$@vaadin/vaadin-themable-mixin",
     "@vaadin/vaadin-lumo-styles": "$@vaadin/vaadin-lumo-styles",
-    "@vaadin/vaadin-material-styles": "$@vaadin/vaadin-material-styles"
+    "@vaadin/vaadin-material-styles": "$@vaadin/vaadin-material-styles",
+    "@nivo/core": "$@nivo/core",
+    "@nivo/line": "$@nivo/line"
   },
   "vaadin": {
     "dependencies": {
@@ -161,6 +165,6 @@
       "workbox-core": "7.1.0",
       "workbox-precaching": "7.1.0"
     },
-    "hash": "81bd4333ec2bf340199e2e2fbe75ae255775c6033b59cdd235a72bf03d4f51ad"
+    "hash": "b4cc19f7508bdd42098ea3aa80a4900d85878d4981f68174231360c1ded8d05f"
   }
 }

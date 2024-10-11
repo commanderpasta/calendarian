@@ -71,7 +71,7 @@ export default function CalendarEntryForm({ calendarEntry, onSubmit }: CalendarE
             </IntegerField>
             <TextField label="Notes" {...field(model.note)} />
             <div className="flex gap-m">
-                <Button onClick={submit} disabled={!dirty} theme="primary">
+                <Button onClick={submit} disabled={!dirty && !!calendarEntry} theme="primary">
                     Save
                 </Button>
             </div>

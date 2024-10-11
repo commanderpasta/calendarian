@@ -10,6 +10,8 @@ import com.ianmatos.calendarian.data.user.User;
 
 public interface CalendarEntryRepository extends JpaRepository<CalendarEntry, Long> {
     List<CalendarEntry> findByUser(User user);
-    
+
     Optional<CalendarEntry> findByUserAndDate(User user, LocalDate date);
+
+    List<CalendarEntry> findByUserAndDateBetweenOrderByDate(User user, LocalDate startDate, LocalDate endDate);
 }
