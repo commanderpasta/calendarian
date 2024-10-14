@@ -6,7 +6,7 @@
 
 Due to directly building on the Spring framework, Spring Security can be used quite easily. Hilla includes a few nice configurations for authentication by default, such as [CSRF protection and session management](https://vaadin.com/docs/latest/hilla/guides/security/intro#security-considerations).
 
-Persistend user management requires some work with the Spring Security documentation, but the in-memory configuration works well out of the box.
+Persistent user management requires some work with the Spring Security documentation, but the in-memory configuration works well out of the box.
 
 ### Tooling
 
@@ -31,7 +31,6 @@ Some of the Vaadin UI components are well-configured out of the box, and are als
 
 ### Docker configuration
 
--
 -   Vaadin Live Reload provides DevTools for the frontend, which are mapped to a hardcoded port, as stated [in the docs](https://vaadin.com/docs/latest/flow/configuration/live-reload/spring-boot#limitations). Therefore using them through a docker container prevents the browser from being able to connect, even when the port is forwarded.
 
 ### Routing
